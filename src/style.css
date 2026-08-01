@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --abt-bg: #0a0912;
+  --abt-bg-alt: #141007;
+  --abt-surface: #16131f;
+  --abt-purple: #b06bff;
+  --abt-cyan: #22d3ee;
+  --abt-amber: #f0a838;
+  --abt-orange: #ff6b35;
+  --abt-whatsapp: #25d366;
+  --abt-text: #f2effa;
+  --abt-text-muted: #9d97b3;
+
+  --abt-font-display: 'Fraunces', serif;
+  --abt-font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--abt-bg);
+  color: var(--abt-text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+.abt-display {
+  font-family: var(--abt-font-display);
+}
+
+.abt-mono {
+  font-family: var(--abt-font-mono);
+  letter-spacing: 0.02em;
+}
+
+.abt-surface {
+  background: var(--abt-surface);
+  border: 1px solid rgba(176, 107, 255, 0.15);
+  border-radius: 0.75rem;
+}
+
+.abt-text-purple {
+  color: var(--abt-purple);
+}
+.abt-text-cyan {
+  color: var(--abt-cyan);
+}
+.abt-text-amber {
+  color: var(--abt-amber);
+}
+.abt-text-muted {
+  color: var(--abt-text-muted);
+}
+
+.abt-btn-neon {
+  background: linear-gradient(135deg, var(--abt-purple), var(--abt-cyan));
+  border: none;
+  color: #0a0912;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.abt-btn-neon:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  color: #0a0912;
+}
+
+.abt-btn-whatsapp {
+  background: var(--abt-whatsapp);
+  border: none;
+  color: #06210f;
+  font-weight: 600;
+  border-radius: 999px;
+  padding: 0.6rem 1.5rem;
+}
+.abt-btn-whatsapp:hover {
+  filter: brightness(1.08);
+  color: #06210f;
+}
+
+.abt-badge-live {
+  background: var(--abt-orange);
+  color: #1a0700;
+  font-family: var(--abt-font-mono);
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.abt-badge-live::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: #1a0700;
+  animation: abt-pulse 1.2s infinite;
+}
+
+@keyframes abt-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+a {
+  color: var(--abt-cyan);
+}
