@@ -1,11 +1,21 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { adminSettings } from '../../api/admin'
 import { adminUploads } from '../../api/uploads'
 
 const settings = ref({
   hero_video_path: null,
   hero_video_url: null,
+})
+
+const formattedVideoUrl = computed(() => {
+  const url = settings.value?.hero_video_url
+  if (!url) return null
+  if (url.startsWith('/')) {
+    const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+    return apiBase ? `${apiBase.replace(/\/+$/, '')}${url}` : url
+  }
+  return url
 })
 const loading = ref(true)
 const uploading = ref(false)
@@ -88,8 +98,8 @@ async function removeVideo() {
       <!-- Preview -->
       <div class="mb-4">
         <label class="form-label small text-white-50 fw-bold">Vista previa actual:</label>
-        <div v-if="settings.hero_video_url" class="ratio ratio-16x9 rounded overflow-hidden border border-secondary">
-          <video :src="settings.hero_video_url" controls autoplay muted loop style="object-fit: cover;"></video>
+        <div v-if="formattedVideoUrl" class="ratio ratio-16x9 rounded overflow-hidden border border-secondary">
+          <video :src="formattedVideoUrl" controls autoplay muted loop style="object-fit: cover;"></video>
         </div>
         <div v-else class="p-4 text-center rounded border border-secondary" style="background: rgba(255,255,255,0.03);">
           <i class="bi bi-film fs-2 text-white-50 d-block mb-2"></i>
@@ -112,7 +122,7 @@ async function removeVideo() {
         </label>
 
         <button
-          v-if="settings.hero_video_url"
+          v-if="formattedVideoUrl"
           class="btn btn-outline-danger btn-sm rounded-pill py-2 px-3"
           @click="removeVideo"
           :disabled="saving || uploading"

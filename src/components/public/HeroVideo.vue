@@ -48,7 +48,12 @@ onMounted(async () => {
   try {
     const data = await fetchHeroSettings()
     if (data?.hero_video_url) {
-      heroVideoUrl.value = data.hero_video_url
+      let url = data.hero_video_url
+      if (url.startsWith('/')) {
+        const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+        url = apiBase ? `${apiBase.replace(/\/+$/, '')}${url}` : url
+      }
+      heroVideoUrl.value = url
     }
   } catch {
     // Keep fallback env var or null if API fails
