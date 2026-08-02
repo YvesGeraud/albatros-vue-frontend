@@ -52,3 +52,9 @@ export const adminQuotes = {
   updateStatus: (id, status) =>
     client.patch(`${base}/quotes/${id}`, { status }).then((r) => r.data.data),
 }
+
+export const adminSettings = {
+  get: () => client.get(`${base}/settings`).then((r) => r.data.data),
+  update: (payload) => client.put(`${base}/settings`, payload).then((r) => r.data.data),
+}
+

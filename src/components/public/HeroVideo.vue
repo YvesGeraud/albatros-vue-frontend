@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue'
 import { animate } from 'animejs'
+import { fetchHeroSettings } from '../../api/settings'
 
-const heroVideoUrl = import.meta.env.VITE_HERO_VIDEO_URL || null
+const heroVideoUrl = ref(import.meta.env.VITE_HERO_VIDEO_URL || null)
 
 const heroText = ref('')
 const showCursor = ref(true)
@@ -41,8 +42,17 @@ function type() {
 
 const heroContent = ref(null)
 
-onMounted(() => {
+onMounted(async () => {
   type()
+
+  try {
+    const data = await fetchHeroSettings()
+    if (data?.hero_video_url) {
+      heroVideoUrl.value = data.hero_video_url
+    }
+  } catch {
+    // Keep fallback env var or null if API fails
+  }
 
   if (heroContent.value) {
     animate(heroContent.value, {

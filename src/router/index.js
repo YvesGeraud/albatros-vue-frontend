@@ -34,6 +34,7 @@ const router = createRouter({
         { path: 'eventos/:id/editar', name: 'admin-event-edit', component: () => import('../views/admin/EventFormView.vue') },
         { path: 'cotizaciones', name: 'admin-quotes', component: () => import('../views/admin/QuotesView.vue') },
         { path: 'testimonios', name: 'admin-testimonials', component: () => import('../views/admin/TestimonialsView.vue') },
+        { path: 'configuracion', name: 'admin-settings', component: () => import('../views/admin/SiteSettingsView.vue') },
       ],
     },
   ],
