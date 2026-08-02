@@ -9,7 +9,7 @@ const quote = useQuoteStore()
 </script>
 
 <template>
-  <div class="abt-surface p-3 h-100 d-flex flex-column">
+  <div class="abt-surface abt-card-accent p-3 h-100 d-flex flex-column">
     <img v-if="product.image_url" :src="product.image_url" class="img-fluid rounded mb-2" :alt="product.name" />
     <h3 class="h6 mb-1" style="color: var(--abt-text);">{{ product.name }}</h3>
     <p class="small abt-text-muted flex-grow-1">{{ product.description }}</p>

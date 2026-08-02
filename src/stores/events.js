@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
-import { fetchEvents, fetchEvent, fetchLiveNow } from '../api/events'
+import { fetchEvents, fetchEvent, fetchLiveNow, fetchFeaturedVideo } from '../api/events'
 
 export const useEventsStore = defineStore('events', {
   state: () => ({
     events: [],
     liveEvent: null,
+    featuredVideoEvent: null,
     loading: false,
     error: null,
   }),
@@ -25,6 +26,13 @@ export const useEventsStore = defineStore('events', {
         this.liveEvent = await fetchLiveNow()
       } catch {
         this.liveEvent = null
+      }
+    },
+    async loadFeaturedVideo() {
+      try {
+        this.featuredVideoEvent = await fetchFeaturedVideo()
+      } catch {
+        this.featuredVideoEvent = null
       }
     },
     fetchOne(slug) {

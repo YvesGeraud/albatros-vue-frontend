@@ -93,6 +93,35 @@ h4,
   color: #06210f;
 }
 
+.abt-card-accent {
+  position: relative;
+  overflow: hidden;
+  padding-left: calc(1rem + 4px) !important;
+}
+.abt-card-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--abt-cyan);
+}
+.abt-card-accent-amber::before {
+  background: var(--abt-amber);
+}
+.abt-card-accent-purple::before {
+  background: var(--abt-purple);
+}
+
+.abt-kicker {
+  font-family: var(--abt-font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .abt-badge-live {
   background: var(--abt-orange);
   color: #1a0700;

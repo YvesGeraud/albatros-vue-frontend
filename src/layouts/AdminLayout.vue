@@ -24,6 +24,7 @@ async function handleLogout() {
         <RouterLink class="nav-link text-white-50" :to="{ name: 'admin-combos' }">Combos</RouterLink>
         <RouterLink class="nav-link text-white-50" :to="{ name: 'admin-events' }">Eventos</RouterLink>
         <RouterLink class="nav-link text-white-50" :to="{ name: 'admin-quotes' }">Cotizaciones</RouterLink>
+        <RouterLink class="nav-link text-white-50" :to="{ name: 'admin-testimonials' }">Testimonios</RouterLink>
       </nav>
       <button class="btn btn-outline-light btn-sm mt-auto" @click="handleLogout">
         Cerrar sesión

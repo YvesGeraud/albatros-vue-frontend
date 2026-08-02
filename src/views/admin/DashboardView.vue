@@ -1,17 +1,18 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
-import { adminCategories, adminProducts, adminCombos, adminEvents, adminQuotes } from '../../api/admin'
+import { adminCategories, adminProducts, adminCombos, adminEvents, adminQuotes, adminTestimonials } from '../../api/admin'
 
-const counts = ref({ categories: 0, products: 0, combos: 0, events: 0, quotes: 0 })
+const counts = ref({ categories: 0, products: 0, combos: 0, events: 0, quotes: 0, testimonials: 0 })
 
 onMounted(async () => {
-  const [categories, products, combos, events, quotes] = await Promise.all([
+  const [categories, products, combos, events, quotes, testimonials] = await Promise.all([
     adminCategories.list(),
     adminProducts.list(),
     adminCombos.list(),
     adminEvents.list(),
     adminQuotes.list(),
+    adminTestimonials.list(),
   ])
   counts.value = {
     categories: categories.length,
@@ -19,6 +20,7 @@ onMounted(async () => {
     combos: combos.length,
     events: events.length,
     quotes: quotes.filter((q) => q.status === 'pending').length,
+    testimonials: testimonials.length,
   }
 })
 </script>
@@ -33,6 +35,7 @@ onMounted(async () => {
         { label: 'Combos', value: counts.combos, to: 'admin-combos' },
         { label: 'Eventos', value: counts.events, to: 'admin-events' },
         { label: 'Cotizaciones pendientes', value: counts.quotes, to: 'admin-quotes' },
+        { label: 'Testimonios', value: counts.testimonials, to: 'admin-testimonials' },
       ]" :key="card.label">
         <RouterLink :to="{ name: card.to }" class="abt-surface d-block p-3 text-decoration-none">
           <span class="abt-mono small abt-text-muted d-block mb-2">{{ card.label }}</span>

@@ -3,18 +3,23 @@ import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import HeroDiscoBall from '../../components/public/HeroDiscoBall.vue'
 import EventCard from '../../components/public/EventCard.vue'
+import FeaturedVideoBanner from '../../components/public/FeaturedVideoBanner.vue'
+import TestimonialsSection from '../../components/public/TestimonialsSection.vue'
 import { useEventsStore } from '../../stores/events'
 
 const eventsStore = useEventsStore()
 
 onMounted(() => {
   eventsStore.load()
+  eventsStore.loadFeaturedVideo()
 })
 </script>
 
 <template>
   <div>
     <HeroDiscoBall />
+
+    <FeaturedVideoBanner v-if="eventsStore.featuredVideoEvent" :event="eventsStore.featuredVideoEvent" />
 
     <section class="container py-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
@@ -30,6 +35,8 @@ onMounted(() => {
         </p>
       </div>
     </section>
+
+    <TestimonialsSection />
 
     <section class="container py-5 text-center">
       <div class="abt-surface p-5">

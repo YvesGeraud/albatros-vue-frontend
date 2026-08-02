@@ -39,6 +39,13 @@ export const adminEventMedia = {
   remove: (mediaId) => client.delete(`${base}/media/${mediaId}`),
 }
 
+export const adminTestimonials = {
+  list: () => client.get(`${base}/testimonials`).then((r) => r.data.data),
+  create: (payload) => client.post(`${base}/testimonials`, payload).then((r) => r.data.data),
+  update: (id, payload) => client.put(`${base}/testimonials/${id}`, payload).then((r) => r.data.data),
+  remove: (id) => client.delete(`${base}/testimonials/${id}`),
+}
+
 export const adminQuotes = {
   list: () => client.get(`${base}/quotes`).then((r) => r.data.data),
   get: (id) => client.get(`${base}/quotes/${id}`).then((r) => r.data.data),

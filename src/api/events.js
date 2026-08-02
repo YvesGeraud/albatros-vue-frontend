@@ -11,3 +11,7 @@ export function fetchEvent(idOrSlug) {
 export function fetchLiveNow() {
   return client.get('/api/v1/events/live-now').then((res) => res.data?.data ?? null)
 }
+
+export function fetchFeaturedVideo() {
+  return client.get('/api/v1/events/featured-video').then((res) => res.data?.data ?? null)
+}

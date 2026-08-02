@@ -9,9 +9,9 @@ const quote = useQuoteStore()
 </script>
 
 <template>
-  <div class="abt-surface p-3 h-100 d-flex flex-column" style="border-color: rgba(240,168,56,0.35);">
+  <div class="abt-surface abt-card-accent abt-card-accent-amber p-3 h-100 d-flex flex-column" style="border-color: rgba(240,168,56,0.35);">
     <img v-if="combo.image_url" :src="combo.image_url" class="img-fluid rounded mb-2" :alt="combo.name" />
-    <span class="abt-mono small abt-text-amber mb-1">COMBO</span>
+    <span class="abt-kicker abt-text-amber mb-1">COMBO</span>
     <h3 class="h6 mb-1" style="color: var(--abt-text);">{{ combo.name }}</h3>
     <p class="small abt-text-muted flex-grow-1">{{ combo.description }}</p>
     <ul class="small abt-text-muted mb-2 ps-3" v-if="combo.products?.length">
