@@ -489,6 +489,36 @@ h1, h2, h3, h4, .abt-display {
   50% { transform: translateX(-50%) translateY(10px); }
 }
 
+.abt-hero-sound-toggle {
+  position: absolute;
+  bottom: 2.2rem;
+  right: 2rem;
+  z-index: 10;
+  background: rgba(10, 9, 18, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(176, 107, 255, 0.3);
+  color: var(--abt-text);
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  font-family: var(--abt-font-body);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all var(--abt-transition-fast);
+  box-shadow: var(--abt-shadow-sm);
+}
+.abt-hero-sound-toggle:hover {
+  background: rgba(176, 107, 255, 0.25);
+  border-color: var(--abt-purple);
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: var(--abt-shadow-glow-purple);
+}
+
 .abt-hero-bottom-curve {
   position: absolute;
   bottom: -1px;

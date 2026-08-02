@@ -41,6 +41,14 @@ function type() {
 }
 
 const heroContent = ref(null)
+const videoRef = ref(null)
+const isMuted = ref(true)
+
+function toggleSound() {
+  if (!videoRef.value) return
+  isMuted.value = !isMuted.value
+  videoRef.value.muted = isMuted.value
+}
 
 onMounted(async () => {
   type()
@@ -80,9 +88,10 @@ onUnmounted(() => {
     <!-- Video background (if URL provided via env) -->
     <video
       v-if="heroVideoUrl"
+      ref="videoRef"
       class="abt-hero-video"
       autoplay
-      muted
+      :muted="isMuted"
       loop
       playsinline
     >
@@ -122,6 +131,17 @@ onUnmounted(() => {
     <a href="#content-start" class="abt-hero-scroll-indicator" aria-label="Scroll hacia abajo">
       <i class="bi bi-chevron-double-down"></i>
     </a>
+
+    <!-- Sound toggle button -->
+    <button
+      v-if="heroVideoUrl"
+      class="abt-hero-sound-toggle"
+      @click="toggleSound"
+      :aria-label="isMuted ? 'Activar sonido' : 'Silenciar sonido'"
+    >
+      <i class="bi" :class="isMuted ? 'bi-volume-mute-fill' : 'bi-volume-up-fill'"></i>
+      <span>{{ isMuted ? 'Activar sonido' : 'Sonido activo' }}</span>
+    </button>
 
     <!-- Bottom curve -->
     <div class="abt-hero-bottom-curve" aria-hidden="true">

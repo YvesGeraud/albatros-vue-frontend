@@ -99,7 +99,7 @@ async function removeVideo() {
       <div class="mb-4">
         <label class="form-label small text-white-50 fw-bold">Vista previa actual:</label>
         <div v-if="formattedVideoUrl" class="ratio ratio-16x9 rounded overflow-hidden border border-secondary">
-          <video :src="formattedVideoUrl" controls autoplay muted loop style="object-fit: cover;"></video>
+          <video :src="formattedVideoUrl" controls autoplay loop style="object-fit: cover;"></video>
         </div>
         <div v-else class="p-4 text-center rounded border border-secondary" style="background: rgba(255,255,255,0.03);">
           <i class="bi bi-film fs-2 text-white-50 d-block mb-2"></i>
