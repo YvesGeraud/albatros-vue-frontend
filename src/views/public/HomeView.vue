@@ -1,10 +1,12 @@
 <script setup>
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import HeroDiscoBall from '../../components/public/HeroDiscoBall.vue'
-import EventCard from '../../components/public/EventCard.vue'
+import HeroVideo from '../../components/public/HeroVideo.vue'
+import ServicesSection from '../../components/public/ServicesSection.vue'
+import EventsCarousel from '../../components/public/EventsCarousel.vue'
 import FeaturedVideoBanner from '../../components/public/FeaturedVideoBanner.vue'
 import TestimonialsSection from '../../components/public/TestimonialsSection.vue'
+import ScrollReveal from '../../components/public/ScrollReveal.vue'
 import { useEventsStore } from '../../stores/events'
 
 const eventsStore = useEventsStore()
@@ -17,38 +19,64 @@ onMounted(() => {
 
 <template>
   <div>
-    <HeroDiscoBall />
+    <!-- Hero -->
+    <HeroVideo />
 
-    <FeaturedVideoBanner v-if="eventsStore.featuredVideoEvent" :event="eventsStore.featuredVideoEvent" />
+    <!-- Anchor for scroll indicator -->
+    <div id="content-start"></div>
 
-    <section class="container py-5">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="abt-display h3 mb-0">Eventos recientes</h2>
-        <RouterLink :to="{ name: 'events' }" class="abt-mono small">Ver todos →</RouterLink>
-      </div>
-      <div class="row g-3">
-        <div v-for="event in eventsStore.events.slice(0, 3)" :key="event.id" class="col-md-4">
-          <EventCard :event="event" />
+    <!-- Services -->
+    <ServicesSection />
+
+    <!-- Featured Video -->
+    <ScrollReveal animation="fade-up">
+      <FeaturedVideoBanner v-if="eventsStore.featuredVideoEvent" :event="eventsStore.featuredVideoEvent" />
+    </ScrollReveal>
+
+    <!-- Events Carousel -->
+    <ScrollReveal animation="fade-up" :delay="100">
+      <section class="abt-section">
+        <div class="container">
+          <EventsCarousel
+            v-if="eventsStore.events.length"
+            :events="eventsStore.events"
+            title="Eventos Recientes"
+            subtitle="Revive nuestros mejores momentos"
+          />
+          <p v-if="!eventsStore.loading && eventsStore.events.length === 0" class="abt-text-muted text-center">
+            Aún no hay eventos publicados.
+          </p>
+          <div class="text-center mt-4" v-if="eventsStore.events.length">
+            <RouterLink :to="{ name: 'events' }" class="abt-btn-outline">
+              Ver todos los eventos →
+            </RouterLink>
+          </div>
         </div>
-        <p v-if="!eventsStore.loading && eventsStore.events.length === 0" class="abt-text-muted">
-          Aún no hay eventos publicados.
-        </p>
-      </div>
-    </section>
+      </section>
+    </ScrollReveal>
 
-    <TestimonialsSection />
+    <!-- Testimonials -->
+    <ScrollReveal animation="fade-up" :delay="100">
+      <TestimonialsSection />
+    </ScrollReveal>
 
-    <section class="container py-5 text-center">
-      <div class="abt-surface p-5">
-        <h2 class="abt-display h3 mb-3">¿Listo para tu evento?</h2>
-        <p class="abt-text-muted mb-4">
-          Arma tu paquete de sonido, iluminación, pista de baile y bailarines,
-          y mira el total al instante.
-        </p>
-        <RouterLink :to="{ name: 'quote-builder' }" class="btn abt-btn-neon btn-lg">
-          Ir al cotizador
-        </RouterLink>
-      </div>
-    </section>
+    <!-- CTA Section -->
+    <ScrollReveal animation="scale">
+      <section class="abt-section">
+        <div class="container">
+          <div class="abt-cta-section">
+            <span class="abt-kicker abt-text-cyan d-block mb-3">COTIZA AHORA</span>
+            <h2 class="abt-display h2 mb-3">¿Listo para tu evento?</h2>
+            <p class="abt-text-muted mb-4 mx-auto" style="max-width: 32rem;">
+              Arma tu paquete de sonido, iluminación, pista de baile y bailarines,
+              y mira el total al instante.
+            </p>
+            <RouterLink :to="{ name: 'quote-builder' }" class="abt-btn-neon btn-lg">
+              Ir al cotizador
+            </RouterLink>
+          </div>
+        </div>
+      </section>
+    </ScrollReveal>
   </div>
 </template>
