@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import L from 'leaflet'
+import '../../leaflet-default-icon'
 
 const props = defineProps({
   latitude: { type: [Number, String, null], default: null },
