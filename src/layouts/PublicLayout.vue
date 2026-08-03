@@ -87,12 +87,8 @@ watch(
     >
       <div class="container d-flex align-items-center justify-content-between">
         <!-- Brand with logo -->
-        <RouterLink class="abt-brand d-flex align-items-center gap-2 text-decoration-none" :to="{ name: 'home' }" @click="closeMobileMenu">
-          <img src="/favicon.svg" alt="Albatros" class="abt-brand-logo" />
-          <span class="abt-brand-text abt-display fw-bold">
-            {{ siteStore.siteName.split(' ')[0] || 'Albatros' }}
-            <span class="abt-text-purple">{{ siteStore.siteName.split(' ').slice(1).join(' ') || '' }}</span>
-          </span>
+        <RouterLink class="abt-brand d-flex align-items-center text-decoration-none" :to="{ name: 'home' }" @click="closeMobileMenu">
+          <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
         </RouterLink>
 
         <!-- Mobile toggle -->
@@ -147,12 +143,8 @@ watch(
         <div class="row g-4">
           <!-- Brand & description -->
           <div class="col-lg-4">
-            <div class="d-flex align-items-center gap-2 mb-3">
-              <img src="/favicon.svg" alt="Albatros" style="width: 32px; height: 32px;" />
-              <h5 class="abt-display mb-0">
-                {{ siteStore.siteName.split(' ')[0] || 'Albatros' }}
-                <span class="abt-text-purple">{{ siteStore.siteName.split(' ').slice(1).join(' ') || '' }}</span>
-              </h5>
+            <div class="mb-3">
+              <img src="/logo-albatros.png" alt="Albatros" style="height: 40px; width: auto;" />
             </div>
             <p class="abt-text-muted small mb-3">
               {{ siteStore.siteTagline }}
