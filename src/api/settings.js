@@ -1,5 +1,10 @@
 import client from './client'
 
+export function fetchSiteSettings() {
+  return client.get('/api/v1/settings').then((r) => r.data.data)
+}
+
+/** @deprecated Use fetchSiteSettings instead */
 export function fetchHeroSettings() {
   return client.get('/api/v1/settings/hero').then((r) => r.data.data)
 }

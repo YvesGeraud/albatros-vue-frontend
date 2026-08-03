@@ -1,9 +1,10 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { animate } from 'animejs'
-import { fetchHeroSettings } from '../../api/settings'
+import { useSiteStore } from '../../stores/site'
 
-const heroVideoUrl = ref(import.meta.env.VITE_HERO_VIDEO_URL || null)
+const siteStore = useSiteStore()
+const heroVideoUrl = computed(() => siteStore.heroVideoUrl)
 
 const heroText = ref('')
 const showCursor = ref(true)
@@ -52,20 +53,6 @@ function toggleSound() {
 
 onMounted(async () => {
   type()
-
-  try {
-    const data = await fetchHeroSettings()
-    if (data?.hero_video_url) {
-      let url = data.hero_video_url
-      if (url.startsWith('/')) {
-        const apiBase = import.meta.env.VITE_API_BASE_URL || ''
-        url = apiBase ? `${apiBase.replace(/\/+$/, '')}${url}` : url
-      }
-      heroVideoUrl.value = url
-    }
-  } catch {
-    // Keep fallback env var or null if API fails
-  }
 
   if (heroContent.value) {
     animate(heroContent.value, {
