@@ -247,7 +247,7 @@ h1, h2, h3, h4, .abt-display {
   flex-shrink: 0;
 }
 .abt-brand-logo {
-  height: 44px;
+  height: 64px;
   width: auto;
   filter: drop-shadow(0 0 8px rgba(176, 107, 255, 0.3));
   transition: transform var(--abt-transition-spring), filter var(--abt-transition-fast);
