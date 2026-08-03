@@ -9,18 +9,9 @@ const eventsStore = useEventsStore()
 const siteStore = useSiteStore()
 const router = useRouter()
 const navScrolled = ref(false)
-const mobileMenuOpen = ref(false)
 
 function onScroll() {
   navScrolled.value = window.scrollY > 50
-}
-
-function toggleMobileMenu() {
-  mobileMenuOpen.value = !mobileMenuOpen.value
-}
-
-function closeMobileMenu() {
-  mobileMenuOpen.value = false
 }
 
 onMounted(async () => {
@@ -85,74 +76,40 @@ watch(
       class="abt-navbar"
       :class="{ 'abt-navbar--scrolled': navScrolled }"
     >
-      <div class="container d-flex align-items-center">
-        <!-- Brand with logo -->
-        <RouterLink class="abt-brand d-flex align-items-center text-decoration-none me-4" :to="{ name: 'home' }" @click="closeMobileMenu">
-          <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
-        </RouterLink>
+      <div class="container">
+        <div class="abt-navbar-wrapper">
+          <!-- Left side: Menu items -->
+          <div class="abt-nav-left">
+            <ul class="abt-nav-links">
+              <li><RouterLink class="abt-nav-link" :to="{ name: 'home' }">Inicio</RouterLink></li>
+              <li><RouterLink class="abt-nav-link" :to="{ name: 'events' }">Eventos</RouterLink></li>
+              <li><RouterLink class="abt-nav-link" :to="{ name: 'catalog' }">Catálogo</RouterLink></li>
+              <li>
+                <RouterLink class="abt-btn-neon btn-sm d-inline-block ms-1" :to="{ name: 'quote-builder' }">
+                  Cotizar
+                </RouterLink>
+              </li>
+            </ul>
 
-        <!-- Nav links (left side, after logo) -->
-        <div class="abt-nav-collapse d-none d-md-flex align-items-center">
-          <ul class="abt-nav-links">
-            <li><RouterLink class="abt-nav-link" :to="{ name: 'home' }">Inicio</RouterLink></li>
-            <li><RouterLink class="abt-nav-link" :to="{ name: 'events' }">Eventos</RouterLink></li>
-            <li><RouterLink class="abt-nav-link" :to="{ name: 'catalog' }">Catálogo</RouterLink></li>
-            <li>
-              <RouterLink class="abt-btn-neon btn-sm d-inline-block" :to="{ name: 'quote-builder' }">
-                Cotizar
-              </RouterLink>
-            </li>
-          </ul>
-        </div>
+            <div v-if="siteStore.socialLinks.length" class="abt-social-icons d-none d-lg-flex ms-3">
+              <a
+                v-for="link in siteStore.socialLinks"
+                :key="link.label"
+                :href="link.url"
+                target="_blank"
+                rel="noopener"
+                :aria-label="link.label"
+              >
+                <i class="bi" :class="link.icon"></i>
+              </a>
+            </div>
+          </div>
 
-        <!-- Social icons (pushed to the right) -->
-        <div v-if="siteStore.socialLinks.length" class="abt-social-icons ms-auto d-none d-md-flex">
-          <a
-            v-for="link in siteStore.socialLinks"
-            :key="link.label"
-            :href="link.url"
-            target="_blank"
-            rel="noopener"
-            :aria-label="link.label"
-          >
-            <i class="bi" :class="link.icon"></i>
-          </a>
-        </div>
-
-        <!-- Mobile toggle -->
-        <button
-          class="abt-mobile-toggle d-md-none ms-auto"
-          type="button"
-          @click="toggleMobileMenu"
-          :aria-expanded="mobileMenuOpen"
-          aria-label="Toggle navigation"
-        >
-          <i class="bi" :class="mobileMenuOpen ? 'bi-x-lg' : 'bi-list'"></i>
-        </button>
-
-        <!-- Mobile fullscreen menu -->
-        <div class="abt-nav-collapse-mobile" :class="{ 'abt-nav-collapse-mobile--open': mobileMenuOpen }">
-          <ul class="abt-nav-links">
-            <li><RouterLink class="abt-nav-link" :to="{ name: 'home' }" @click="closeMobileMenu">Inicio</RouterLink></li>
-            <li><RouterLink class="abt-nav-link" :to="{ name: 'events' }" @click="closeMobileMenu">Eventos</RouterLink></li>
-            <li><RouterLink class="abt-nav-link" :to="{ name: 'catalog' }" @click="closeMobileMenu">Catálogo</RouterLink></li>
-            <li>
-              <RouterLink class="abt-btn-neon btn-sm d-inline-block" :to="{ name: 'quote-builder' }" @click="closeMobileMenu">
-                Cotizar
-              </RouterLink>
-            </li>
-          </ul>
-          <div v-if="siteStore.socialLinks.length" class="abt-social-icons mt-3">
-            <a
-              v-for="link in siteStore.socialLinks"
-              :key="link.label"
-              :href="link.url"
-              target="_blank"
-              rel="noopener"
-              :aria-label="link.label"
-            >
-              <i class="bi" :class="link.icon"></i>
-            </a>
+          <!-- Right side: Logo Banner -->
+          <div class="abt-nav-right">
+            <RouterLink class="abt-brand text-decoration-none" :to="{ name: 'home' }">
+              <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
+            </RouterLink>
           </div>
         </div>
       </div>
