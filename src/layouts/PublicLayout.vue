@@ -85,15 +85,43 @@ watch(
       class="abt-navbar"
       :class="{ 'abt-navbar--scrolled': navScrolled }"
     >
-      <div class="container d-flex align-items-center justify-content-between">
+      <div class="container d-flex align-items-center">
         <!-- Brand with logo -->
-        <RouterLink class="abt-brand d-flex align-items-center text-decoration-none" :to="{ name: 'home' }" @click="closeMobileMenu">
+        <RouterLink class="abt-brand d-flex align-items-center text-decoration-none me-4" :to="{ name: 'home' }" @click="closeMobileMenu">
           <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
         </RouterLink>
 
+        <!-- Nav links (left side, after logo) -->
+        <div class="abt-nav-collapse d-none d-md-flex align-items-center">
+          <ul class="abt-nav-links">
+            <li><RouterLink class="abt-nav-link" :to="{ name: 'home' }">Inicio</RouterLink></li>
+            <li><RouterLink class="abt-nav-link" :to="{ name: 'events' }">Eventos</RouterLink></li>
+            <li><RouterLink class="abt-nav-link" :to="{ name: 'catalog' }">Catálogo</RouterLink></li>
+            <li>
+              <RouterLink class="abt-btn-neon btn-sm d-inline-block" :to="{ name: 'quote-builder' }">
+                Cotizar
+              </RouterLink>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Social icons (pushed to the right) -->
+        <div v-if="siteStore.socialLinks.length" class="abt-social-icons ms-auto d-none d-md-flex">
+          <a
+            v-for="link in siteStore.socialLinks"
+            :key="link.label"
+            :href="link.url"
+            target="_blank"
+            rel="noopener"
+            :aria-label="link.label"
+          >
+            <i class="bi" :class="link.icon"></i>
+          </a>
+        </div>
+
         <!-- Mobile toggle -->
         <button
-          class="abt-mobile-toggle d-md-none"
+          class="abt-mobile-toggle d-md-none ms-auto"
           type="button"
           @click="toggleMobileMenu"
           :aria-expanded="mobileMenuOpen"
@@ -102,8 +130,8 @@ watch(
           <i class="bi" :class="mobileMenuOpen ? 'bi-x-lg' : 'bi-list'"></i>
         </button>
 
-        <!-- Nav links + social -->
-        <div class="abt-nav-collapse" :class="{ 'abt-nav-collapse--open': mobileMenuOpen }">
+        <!-- Mobile fullscreen menu -->
+        <div class="abt-nav-collapse-mobile" :class="{ 'abt-nav-collapse-mobile--open': mobileMenuOpen }">
           <ul class="abt-nav-links">
             <li><RouterLink class="abt-nav-link" :to="{ name: 'home' }" @click="closeMobileMenu">Inicio</RouterLink></li>
             <li><RouterLink class="abt-nav-link" :to="{ name: 'events' }" @click="closeMobileMenu">Eventos</RouterLink></li>
@@ -114,9 +142,7 @@ watch(
               </RouterLink>
             </li>
           </ul>
-
-          <!-- Social icons (dynamic from store) -->
-          <div v-if="siteStore.socialLinks.length" class="abt-social-icons ms-md-4 mt-3 mt-md-0">
+          <div v-if="siteStore.socialLinks.length" class="abt-social-icons mt-3">
             <a
               v-for="link in siteStore.socialLinks"
               :key="link.label"
