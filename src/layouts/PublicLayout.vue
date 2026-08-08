@@ -78,38 +78,38 @@ watch(
     >
       <div class="container">
         <div class="abt-navbar-wrapper">
-          <!-- Left side: Menu items -->
+          <!-- Logo (left) -->
+          <RouterLink class="abt-brand text-decoration-none" :to="{ name: 'home' }">
+            <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
+          </RouterLink>
+
+          <!-- Nav links (after logo) -->
           <div class="abt-nav-left">
             <ul class="abt-nav-links">
               <li><RouterLink class="abt-nav-link" :to="{ name: 'home' }">Inicio</RouterLink></li>
               <li><RouterLink class="abt-nav-link" :to="{ name: 'events' }">Eventos</RouterLink></li>
               <li><RouterLink class="abt-nav-link" :to="{ name: 'catalog' }">Catálogo</RouterLink></li>
+              <li><a class="abt-nav-link" href="#nosotros">Nosotros</a></li>
               <li>
                 <RouterLink class="abt-btn-neon btn-sm d-inline-block ms-1" :to="{ name: 'quote-builder' }">
                   Cotizar
                 </RouterLink>
               </li>
             </ul>
-
-            <div v-if="siteStore.socialLinks.length" class="abt-social-icons d-none d-lg-flex ms-3">
-              <a
-                v-for="link in siteStore.socialLinks"
-                :key="link.label"
-                :href="link.url"
-                target="_blank"
-                rel="noopener"
-                :aria-label="link.label"
-              >
-                <i class="bi" :class="link.icon"></i>
-              </a>
-            </div>
           </div>
 
-          <!-- Right side: Logo Banner -->
-          <div class="abt-nav-right">
-            <RouterLink class="abt-brand text-decoration-none" :to="{ name: 'home' }">
-              <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
-            </RouterLink>
+          <!-- Social icons (pushed to far right) -->
+          <div v-if="siteStore.socialLinks.length" class="abt-social-icons ms-auto d-none d-lg-flex">
+            <a
+              v-for="link in siteStore.socialLinks"
+              :key="link.label"
+              :href="link.url"
+              target="_blank"
+              rel="noopener"
+              :aria-label="link.label"
+            >
+              <i class="bi" :class="link.icon"></i>
+            </a>
           </div>
         </div>
       </div>

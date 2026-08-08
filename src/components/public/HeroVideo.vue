@@ -5,17 +5,21 @@ import { useSiteStore } from '../../stores/site'
 
 const siteStore = useSiteStore()
 const heroVideoUrl = computed(() => siteStore.heroVideoUrl)
+const heroKicker = computed(() => siteStore.heroKicker)
+const heroSubtitle = computed(() => siteStore.heroSubtitle)
 
 const heroText = ref('')
 const showCursor = ref(true)
-const phrases = ['¡Haz tu Fiesta Única!', 'Sonido · Iluminación · Pista de Baile', 'Albatros Tlaxcala']
 let currentPhrase = 0
 let currentChar = 0
 let isDeleting = false
 let timeout = null
 
 function type() {
-  const phrase = phrases[currentPhrase]
+  const phrases = siteStore.heroPhrases
+  if (!phrases.length) return
+
+  const phrase = phrases[currentPhrase % phrases.length]
 
   if (!isDeleting) {
     heroText.value = phrase.substring(0, currentChar + 1)
@@ -97,12 +101,12 @@ onUnmounted(() => {
 
     <!-- Content -->
     <div ref="heroContent" class="abt-hero-content" style="opacity: 0;">
-      <p class="abt-mono small abt-text-cyan mb-3">TLAXCALA · SONIDO Y EVENTOS</p>
+      <p class="abt-mono small abt-text-cyan mb-3">{{ heroKicker }}</p>
       <h1 class="abt-display fw-bold mb-3">
         <span>{{ heroText }}</span><span class="abt-typewriter-cursor" v-show="showCursor"></span>
       </h1>
       <p class="lead mx-auto" style="max-width: 36rem;">
-        Sonido, iluminación, pista de baile y bailarines para que tu evento sea inolvidable.
+        {{ heroSubtitle }}
       </p>
       <div class="d-flex justify-content-center gap-3 flex-wrap">
         <RouterLink :to="{ name: 'quote-builder' }" class="abt-btn-neon">

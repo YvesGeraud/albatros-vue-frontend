@@ -13,6 +13,11 @@ const settings = ref({
   whatsapp_number: '',
   hero_video_path: null,
   hero_video_url: null,
+  hero_kicker: '',
+  hero_subtitle: '',
+  hero_phrases: '',
+  about_title: '',
+  about_text: '',
 })
 
 const formattedVideoUrl = computed(() => {
@@ -30,6 +35,8 @@ const uploading = ref(false)
 const savingIdentity = ref(false)
 const savingSocial = ref(false)
 const savingWhatsapp = ref(false)
+const savingHero = ref(false)
+const savingAbout = ref(false)
 const error = ref(null)
 const successMessage = ref('')
 
@@ -140,6 +147,43 @@ async function removeVideo() {
     error.value = 'Error al eliminar el video.'
   } finally {
     uploading.value = false
+  }
+}
+
+/* --- Hero Text --- */
+async function saveHero() {
+  savingHero.value = true
+  error.value = null
+  try {
+    const updated = await adminSettings.update({
+      hero_kicker: settings.value.hero_kicker || null,
+      hero_subtitle: settings.value.hero_subtitle || null,
+      hero_phrases: settings.value.hero_phrases || null,
+    })
+    settings.value = updated
+    flashSuccess('Texto del hero actualizado.')
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Error al guardar.'
+  } finally {
+    savingHero.value = false
+  }
+}
+
+/* --- About --- */
+async function saveAbout() {
+  savingAbout.value = true
+  error.value = null
+  try {
+    const updated = await adminSettings.update({
+      about_title: settings.value.about_title || null,
+      about_text: settings.value.about_text || null,
+    })
+    settings.value = updated
+    flashSuccess('Sección Nosotros actualizada.')
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Error al guardar.'
+  } finally {
+    savingAbout.value = false
   }
 }
 </script>
@@ -372,6 +416,115 @@ async function removeVideo() {
             <i class="bi bi-trash me-1"></i> Quitar video
           </button>
         </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECTION 5: Texto del Hero -->
+      <!-- ============================================ -->
+      <section class="abt-surface p-4 mb-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-type-h1 fs-5 abt-text-cyan"></i>
+          <h2 class="h5 abt-display mb-0" style="color: var(--abt-text);">Texto del Banner (Hero)</h2>
+        </div>
+        <p class="abt-text-muted small mb-4">
+          Estos textos aparecen sobre el video del banner principal en la página de inicio.
+        </p>
+
+        <div class="mb-3">
+          <label class="form-label small text-white-50 fw-bold" for="heroKicker">Kicker (texto pequeño encima del título)</label>
+          <input
+            id="heroKicker"
+            v-model="settings.hero_kicker"
+            type="text"
+            class="form-control bg-dark text-light border-secondary"
+            placeholder="Ej: TLAXCALA · SONIDO Y EVENTOS"
+            maxlength="120"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label small text-white-50 fw-bold" for="heroPhrases">Frases del typewriter (separadas por <code>|</code>)</label>
+          <input
+            id="heroPhrases"
+            v-model="settings.hero_phrases"
+            type="text"
+            class="form-control bg-dark text-light border-secondary"
+            placeholder="¡Haz tu Fiesta Única!|Sonido · Iluminación · Pista de Baile|Albatros Tlaxcala"
+            maxlength="1000"
+          />
+          <div class="form-text abt-text-muted">
+            Separa cada frase con el carácter <code>|</code>. El texto rotará automáticamente con efecto de máquina de escribir.
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label small text-white-50 fw-bold" for="heroSubtitle">Subtítulo (debajo del título animado)</label>
+          <input
+            id="heroSubtitle"
+            v-model="settings.hero_subtitle"
+            type="text"
+            class="form-control bg-dark text-light border-secondary"
+            placeholder="Ej: Sonido, iluminación, pista de baile y bailarines para que tu evento sea inolvidable."
+            maxlength="500"
+          />
+        </div>
+
+        <button
+          class="btn abt-btn-neon btn-sm"
+          @click="saveHero"
+          :disabled="savingHero"
+        >
+          <i class="bi bi-check2 me-1"></i>
+          {{ savingHero ? 'Guardando...' : 'Guardar textos del hero' }}
+        </button>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECTION 6: Nosotros / Blog -->
+      <!-- ============================================ -->
+      <section class="abt-surface p-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <i class="bi bi-people fs-5 abt-text-cyan"></i>
+          <h2 class="h5 abt-display mb-0" style="color: var(--abt-text);">Nosotros / Blog</h2>
+        </div>
+        <p class="abt-text-muted small mb-4">
+          Esta sección aparece en la página de inicio debajo del video. Puedes usar HTML básico
+          (<code>&lt;strong&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;&lt;li&gt;</code>).
+          Si dejas el texto vacío, la sección no se mostrará.
+        </p>
+
+        <div class="mb-3">
+          <label class="form-label small text-white-50 fw-bold" for="aboutTitle">Título de la sección</label>
+          <input
+            id="aboutTitle"
+            v-model="settings.about_title"
+            type="text"
+            class="form-control bg-dark text-light border-secondary"
+            placeholder="Ej: Sobre Grupo Albatros"
+            maxlength="200"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label small text-white-50 fw-bold" for="aboutText">Contenido (acepta HTML)</label>
+          <textarea
+            id="aboutText"
+            v-model="settings.about_text"
+            class="form-control bg-dark text-light border-secondary"
+            rows="8"
+            maxlength="5000"
+            placeholder="Empresa Musical Albatros, socialmente responsable, agradece su preferencia..."
+          ></textarea>
+        </div>
+
+        <button
+          class="btn abt-btn-neon btn-sm"
+          @click="saveAbout"
+          :disabled="savingAbout"
+        >
+          <i class="bi bi-check2 me-1"></i>
+          {{ savingAbout ? 'Guardando...' : 'Guardar sección Nosotros' }}
+        </button>
       </section>
     </template>
   </div>

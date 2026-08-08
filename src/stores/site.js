@@ -11,6 +11,11 @@ export const useSiteStore = defineStore('site', {
     socialTiktok: '',
     whatsappNumber: '',
     heroVideoUrl: null,
+    heroKicker: 'TLAXCALA · SONIDO Y EVENTOS',
+    heroSubtitle: 'Sonido, iluminación, pista de baile y bailarines para que tu evento sea inolvidable.',
+    heroPhrases: ['¡Haz tu Fiesta Única!', 'Sonido · Iluminación · Pista de Baile', 'Albatros Tlaxcala'],
+    aboutTitle: 'Sobre Grupo Albatros',
+    aboutText: '',
     loaded: false,
   }),
   actions: {
@@ -34,6 +39,17 @@ export const useSiteStore = defineStore('site', {
           }
           this.heroVideoUrl = url
         }
+
+        // Hero text fields
+        this.heroKicker = data.hero_kicker || this.heroKicker
+        this.heroSubtitle = data.hero_subtitle || this.heroSubtitle
+        if (data.hero_phrases) {
+          this.heroPhrases = data.hero_phrases.split('|').map(p => p.trim()).filter(Boolean)
+        }
+
+        // About section
+        this.aboutTitle = data.about_title || this.aboutTitle
+        this.aboutText = data.about_text || ''
 
         this.loaded = true
       } catch {

@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import HeroVideo from '../../components/public/HeroVideo.vue'
+import AboutSection from '../../components/public/AboutSection.vue'
 import ServicesSection from '../../components/public/ServicesSection.vue'
 import EventsCarousel from '../../components/public/EventsCarousel.vue'
 import FeaturedVideoBanner from '../../components/public/FeaturedVideoBanner.vue'
@@ -24,6 +25,11 @@ onMounted(() => {
 
     <!-- Anchor for scroll indicator -->
     <div id="content-start"></div>
+
+    <!-- About / Nosotros -->
+    <ScrollReveal animation="fade-up">
+      <AboutSection />
+    </ScrollReveal>
 
     <!-- Services -->
     <ServicesSection />
