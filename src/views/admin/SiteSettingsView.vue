@@ -17,7 +17,10 @@ const settings = ref({
   hero_subtitle: '',
   hero_phrases: '',
   about_title: '',
-  about_text: '',
+  about_description: '',
+  about_bullets: '',
+  about_image_path: null,
+  about_image_url: null,
 })
 
 const formattedVideoUrl = computed(() => {
@@ -30,8 +33,19 @@ const formattedVideoUrl = computed(() => {
   return url
 })
 
+const formattedAboutImageUrl = computed(() => {
+  const url = settings.value?.about_image_url
+  if (!url) return null
+  if (url.startsWith('/')) {
+    const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+    return apiBase ? `${apiBase.replace(/\/+$/, '')}${url}` : url
+  }
+  return url
+})
+
 const loading = ref(true)
 const uploading = ref(false)
+const uploadingAbout = ref(false)
 const savingIdentity = ref(false)
 const savingSocial = ref(false)
 const savingWhatsapp = ref(false)
@@ -176,7 +190,8 @@ async function saveAbout() {
   try {
     const updated = await adminSettings.update({
       about_title: settings.value.about_title || null,
-      about_text: settings.value.about_text || null,
+      about_description: settings.value.about_description || null,
+      about_bullets: settings.value.about_bullets || null,
     })
     settings.value = updated
     flashSuccess('Sección Nosotros actualizada.')
@@ -184,6 +199,45 @@ async function saveAbout() {
     error.value = err.response?.data?.message || 'Error al guardar.'
   } finally {
     savingAbout.value = false
+  }
+}
+
+async function handleAboutImageUpload(event) {
+  const file = event.target.files[0]
+  if (!file) return
+
+  uploadingAbout.value = true
+  error.value = null
+
+  try {
+    const uploaded = await adminUploads.upload(file, 'about')
+    settings.value.about_image_path = uploaded.path
+    settings.value.about_image_url = uploaded.url
+
+    await adminSettings.update({ about_image_path: uploaded.path })
+    flashSuccess('Imagen subida y actualizada correctamente.')
+  } catch (err) {
+    error.value = err.response?.data?.message || 'Error al subir la imagen.'
+  } finally {
+    uploadingAbout.value = false
+    event.target.value = ''
+  }
+}
+
+async function removeAboutImage() {
+  if (!confirm('¿Seguro de que deseas quitar la imagen de la sección Nosotros?')) return
+
+  uploadingAbout.value = true
+  error.value = null
+
+  try {
+    const updated = await adminSettings.update({ about_image_path: null })
+    settings.value = updated
+    flashSuccess('Imagen eliminada correctamente.')
+  } catch {
+    error.value = 'Error al eliminar la imagen.'
+  } finally {
+    uploadingAbout.value = false
   }
 }
 </script>
@@ -488,9 +542,7 @@ async function saveAbout() {
           <h2 class="h5 abt-display mb-0" style="color: var(--abt-text);">Nosotros / Blog</h2>
         </div>
         <p class="abt-text-muted small mb-4">
-          Esta sección aparece en la página de inicio debajo del video. Puedes usar HTML básico
-          (<code>&lt;strong&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;&lt;li&gt;</code>).
-          Si dejas el texto vacío, la sección no se mostrará.
+          Esta sección aparece en la página de inicio debajo del video. Si dejas el texto vacío, la sección no se mostrará.
         </p>
 
         <div class="mb-3">
@@ -505,16 +557,61 @@ async function saveAbout() {
           />
         </div>
 
-        <div class="mb-4">
-          <label class="form-label small text-white-50 fw-bold" for="aboutText">Contenido (acepta HTML)</label>
+        <div class="mb-3">
+          <label class="form-label small text-white-50 fw-bold" for="aboutDescription">Descripción principal (texto plano)</label>
           <textarea
-            id="aboutText"
-            v-model="settings.about_text"
+            id="aboutDescription"
+            v-model="settings.about_description"
             class="form-control bg-dark text-light border-secondary"
-            rows="8"
-            maxlength="5000"
+            rows="4"
+            maxlength="2000"
             placeholder="Empresa Musical Albatros, socialmente responsable, agradece su preferencia..."
           ></textarea>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label small text-white-50 fw-bold" for="aboutBullets">Puntos destacados (uno por línea)</label>
+          <textarea
+            id="aboutBullets"
+            v-model="settings.about_bullets"
+            class="form-control bg-dark text-light border-secondary"
+            rows="4"
+            maxlength="2000"
+            placeholder="Música 100% en vivo&#10;Más de 35 años de experiencia&#10;Servicio personalizado"
+          ></textarea>
+          <div class="form-text abt-text-muted">Cada línea se mostrará como un punto con un ícono de verificación (✓).</div>
+        </div>
+
+        <!-- Image Upload for About Section -->
+        <div class="mb-4">
+          <label class="form-label small text-white-50 fw-bold">Imagen representativa (Opcional)</label>
+          
+          <div v-if="formattedAboutImageUrl" class="mb-3 d-inline-block position-relative border border-secondary rounded overflow-hidden" style="max-width: 300px;">
+            <img :src="formattedAboutImageUrl" alt="Vista previa" class="img-fluid" />
+          </div>
+          
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <label class="btn abt-btn-outline mb-0 position-relative" :class="{ disabled: uploadingAbout }">
+              <i class="bi bi-upload me-2"></i>
+              {{ uploadingAbout ? 'Subiendo imagen...' : 'Subir imagen' }}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                class="position-absolute top-0 start-0 opacity-0 w-100 h-100 cursor-pointer"
+                @change="handleAboutImageUpload"
+                :disabled="uploadingAbout"
+              />
+            </label>
+
+            <button
+              v-if="formattedAboutImageUrl"
+              class="btn btn-outline-danger btn-sm rounded-pill py-2 px-3"
+              @click="removeAboutImage"
+              :disabled="uploadingAbout"
+            >
+              <i class="bi bi-trash me-1"></i> Quitar imagen
+            </button>
+          </div>
         </div>
 
         <button

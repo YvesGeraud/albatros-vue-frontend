@@ -15,7 +15,9 @@ export const useSiteStore = defineStore('site', {
     heroSubtitle: 'Sonido, iluminación, pista de baile y bailarines para que tu evento sea inolvidable.',
     heroPhrases: ['¡Haz tu Fiesta Única!', 'Sonido · Iluminación · Pista de Baile', 'Albatros Tlaxcala'],
     aboutTitle: 'Sobre Grupo Albatros',
-    aboutText: '',
+    aboutDescription: '',
+    aboutBullets: [],
+    aboutImageUrl: null,
     loaded: false,
   }),
   actions: {
@@ -49,7 +51,18 @@ export const useSiteStore = defineStore('site', {
 
         // About section
         this.aboutTitle = data.about_title || this.aboutTitle
-        this.aboutText = data.about_text || ''
+        this.aboutDescription = data.about_description || ''
+        if (data.about_bullets) {
+          this.aboutBullets = data.about_bullets.split('\n').map(b => b.trim()).filter(Boolean)
+        }
+        if (data.about_image_url) {
+          let url = data.about_image_url
+          if (url.startsWith('/')) {
+            const apiBase = import.meta.env.VITE_API_BASE_URL || ''
+            url = apiBase ? `${apiBase.replace(/\/+$/, '')}${url}` : url
+          }
+          this.aboutImageUrl = url
+        }
 
         this.loaded = true
       } catch {

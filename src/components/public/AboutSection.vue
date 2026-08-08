@@ -4,8 +4,11 @@ import { useSiteStore } from '../../stores/site'
 
 const siteStore = useSiteStore()
 const aboutTitle = computed(() => siteStore.aboutTitle)
-const aboutText = computed(() => siteStore.aboutText)
-const hasContent = computed(() => !!aboutText.value)
+const aboutDescription = computed(() => siteStore.aboutDescription)
+const aboutBullets = computed(() => siteStore.aboutBullets)
+const aboutImageUrl = computed(() => siteStore.aboutImageUrl)
+
+const hasContent = computed(() => !!aboutDescription.value)
 </script>
 
 <template>
@@ -24,7 +27,27 @@ const hasContent = computed(() => !!aboutText.value)
               <i class="bi bi-music-note-beamed"></i>
             </div>
 
-            <div class="abt-about-content" v-html="aboutText"></div>
+            <div class="row g-4 align-items-center">
+              <!-- Content Column -->
+              <div :class="aboutImageUrl ? 'col-md-7' : 'col-12'">
+                <div class="abt-about-content">
+                  <p class="mb-4">{{ aboutDescription }}</p>
+                  
+                  <ul v-if="aboutBullets.length" class="abt-about-list">
+                    <li v-for="(bullet, index) in aboutBullets" :key="index">
+                      {{ bullet }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <!-- Image Column -->
+              <div v-if="aboutImageUrl" class="col-md-5">
+                <div class="abt-about-image-wrapper">
+                  <img :src="aboutImageUrl" alt="Sobre Grupo Albatros" class="img-fluid rounded shadow" />
+                </div>
+              </div>
+            </div>
 
             <!-- Stats row -->
             <div class="abt-about-stats">
@@ -86,36 +109,45 @@ const hasContent = computed(() => !!aboutText.value)
   color: var(--abt-text-muted);
   font-size: 1.05rem;
   line-height: 1.8;
-  max-width: 48rem;
 }
 
-.abt-about-content :deep(p) {
-  margin-bottom: 1rem;
-}
-
-.abt-about-content :deep(strong) {
-  color: var(--abt-text);
-  font-weight: 600;
-}
-
-.abt-about-content :deep(ul) {
+.abt-about-list {
   list-style: none;
   padding: 0;
   margin: 1.5rem 0;
 }
 
-.abt-about-content :deep(li) {
+.abt-about-list li {
   padding: 0.5rem 0;
   padding-left: 1.5rem;
   position: relative;
+  color: var(--abt-text);
 }
 
-.abt-about-content :deep(li)::before {
+.abt-about-list li::before {
   content: '✓';
   position: absolute;
   left: 0;
   color: var(--abt-cyan);
   font-weight: 700;
+}
+
+.abt-about-image-wrapper {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.abt-about-image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform var(--abt-transition-smooth);
+}
+
+.abt-about-image-wrapper:hover img {
+  transform: scale(1.05);
 }
 
 .abt-about-stats {
