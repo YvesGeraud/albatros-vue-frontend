@@ -29,7 +29,7 @@ const productsForActiveCategory = computed(() =>
             :class="activeCategory === 'combos' ? 'abt-btn-neon' : 'btn-outline-light'"
             @click="activeCategory = 'combos'"
           >
-            Combos
+            Paquetes
           </button>
           <button
             v-for="category in catalog.categories"

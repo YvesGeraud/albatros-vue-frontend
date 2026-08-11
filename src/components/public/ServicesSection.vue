@@ -22,8 +22,8 @@ const services = [
   },
   {
     icon: 'bi-people-fill',
-    title: 'Bailarines',
-    description: 'Show de bailarines profesionales para animar y sorprender a tus invitados.',
+    title: 'Animadores',
+    description: 'Animadores profesionales para hacer de tu evento una experiencia única.',
   },
 ]
 
