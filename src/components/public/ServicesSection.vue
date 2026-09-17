@@ -53,7 +53,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="abt-section" id="services">
+  <section class="abt-section" id="servicios">
     <div class="container">
       <div class="abt-section-header">
         <div class="abt-section-line"></div>

@@ -1,12 +1,14 @@
 <script setup>
 import { onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
 import HeroVideo from '../../components/public/HeroVideo.vue'
-import AboutSection from '../../components/public/AboutSection.vue'
+import BrandBanner from '../../components/public/BrandBanner.vue'
+import AccordionGallery from '../../components/public/AccordionGallery.vue'
+import PhotoGallerySection from '../../components/public/PhotoGallerySection.vue'
+import VideoGallerySection from '../../components/public/VideoGallerySection.vue'
 import ServicesSection from '../../components/public/ServicesSection.vue'
-import EventsCarousel from '../../components/public/EventsCarousel.vue'
-import FeaturedVideoBanner from '../../components/public/FeaturedVideoBanner.vue'
+import StageSimulator from '../../components/public/StageSimulator.vue'
 import TestimonialsSection from '../../components/public/TestimonialsSection.vue'
+import AboutSection from '../../components/public/AboutSection.vue'
 import ScrollReveal from '../../components/public/ScrollReveal.vue'
 import { useEventsStore } from '../../stores/events'
 
@@ -20,69 +22,47 @@ onMounted(() => {
 
 <template>
   <div>
-    <!-- Hero -->
+    <!-- 1. Hero / Inicio -->
     <HeroVideo />
 
-    <!-- Anchor for scroll indicator -->
-    <div id="content-start"></div>
+    <!-- 2. Identidad / Logo Albatros con Light Rays -->
+    <BrandBanner />
 
-    <!-- About / Nosotros -->
+    <!-- 3. Trayectoria & Versatilidad (70's a Actualidad) -->
     <ScrollReveal animation="fade-up">
-      <AboutSection />
+      <AccordionGallery />
     </ScrollReveal>
 
-    <!-- Services -->
-    <ServicesSection />
-
-    <!-- Featured Video -->
+    <!-- 4. Galería Masiva de Fotos -->
     <ScrollReveal animation="fade-up">
-      <FeaturedVideoBanner v-if="eventsStore.featuredVideoEvent" :event="eventsStore.featuredVideoEvent" />
+      <PhotoGallerySection />
     </ScrollReveal>
 
-    <!-- Events Carousel -->
-    <ScrollReveal animation="fade-up" :delay="100">
-      <section class="abt-section">
-        <div class="container">
-          <EventsCarousel
-            v-if="eventsStore.events.length"
-            :events="eventsStore.events"
-            title="Eventos Recientes"
-            subtitle="Revive nuestros mejores momentos"
-          />
-          <p v-if="!eventsStore.loading && eventsStore.events.length === 0" class="abt-text-muted text-center">
-            Aún no hay eventos publicados.
-          </p>
-          <div class="text-center mt-4" v-if="eventsStore.events.length">
-            <RouterLink :to="{ name: 'events' }" class="abt-btn-outline">
-              Ver todos los eventos →
-            </RouterLink>
-          </div>
-        </div>
-      </section>
+    <!-- 5. Galería de Videos & Producciones en Vivo -->
+    <ScrollReveal animation="fade-up">
+      <VideoGallerySection />
     </ScrollReveal>
 
-    <!-- Testimonials -->
-    <ScrollReveal animation="fade-up" :delay="100">
+    <!-- 6. Servicios de Producción -->
+    <ScrollReveal animation="fade-up">
+      <ServicesSection />
+    </ScrollReveal>
+
+    <!-- 7. Simulador de Escenario & Paquetes -->
+    <ScrollReveal animation="fade-up">
+      <StageSimulator />
+    </ScrollReveal>
+
+    <!-- 8. Testimonios & Reseñas -->
+    <ScrollReveal animation="fade-up">
       <TestimonialsSection />
     </ScrollReveal>
 
-    <!-- CTA Section -->
-    <ScrollReveal animation="scale">
-      <section class="abt-section">
-        <div class="container">
-          <div class="abt-cta-section">
-            <span class="abt-kicker abt-text-cyan d-block mb-3">COTIZA AHORA</span>
-            <h2 class="abt-display h2 mb-3">¿Listo para tu evento?</h2>
-            <p class="abt-text-muted mb-4 mx-auto" style="max-width: 32rem;">
-              Arma tu paquete de sonido, iluminación, pista de baile y bailarines,
-              y mira el total al instante.
-            </p>
-            <RouterLink :to="{ name: 'quote-builder' }" class="abt-btn-neon btn-lg">
-              Ir al cotizador
-            </RouterLink>
-          </div>
-        </div>
-      </section>
+    <!-- 9. Nosotros & Contacto -->
+    <ScrollReveal animation="fade-up">
+      <AboutSection />
     </ScrollReveal>
   </div>
 </template>
+
+

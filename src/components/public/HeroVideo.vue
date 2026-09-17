@@ -75,7 +75,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="abt-hero-section" id="hero">
+  <section class="abt-hero-section" id="inicio">
     <!-- Video background (if URL provided via env) -->
     <video
       v-if="heroVideoUrl"
@@ -109,17 +109,17 @@ onUnmounted(() => {
         {{ heroSubtitle }}
       </p>
       <div class="d-flex justify-content-center gap-3 flex-wrap">
-        <RouterLink :to="{ name: 'quote-builder' }" class="abt-btn-neon">
+        <a href="#cotizador" class="abt-btn-neon">
           Arma tu cotización
-        </RouterLink>
-        <RouterLink :to="{ name: 'events' }" class="abt-btn-outline">
-          Ver eventos
-        </RouterLink>
+        </a>
+        <a href="#galeria" class="abt-btn-outline">
+          Ver galería
+        </a>
       </div>
     </div>
 
     <!-- Scroll indicator -->
-    <a href="#content-start" class="abt-hero-scroll-indicator" aria-label="Scroll hacia abajo">
+    <a href="#albatros" class="abt-hero-scroll-indicator" aria-label="Scroll hacia abajo">
       <i class="bi bi-chevron-double-down"></i>
     </a>
 

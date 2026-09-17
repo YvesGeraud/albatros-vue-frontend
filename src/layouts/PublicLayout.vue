@@ -4,11 +4,23 @@ import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useEventsStore } from '../stores/events'
 import { useSiteStore } from '../stores/site'
 import Swal from 'sweetalert2'
+import GooeyNav from '../components/public/GooeyNav.vue'
 
 const eventsStore = useEventsStore()
 const siteStore = useSiteStore()
 const router = useRouter()
 const navScrolled = ref(false)
+
+const navItems = [
+  { label: 'Inicio', href: '#inicio' },
+  { label: 'Albatros', href: '#albatros' },
+  { label: 'Trayectoria', href: '#trayectoria' },
+  { label: 'Fotos', href: '#fotos' },
+  { label: 'Videos', href: '#videos' },
+  { label: 'Servicios', href: '#servicios' },
+  { label: 'Paquetes', href: '#paquetes' },
+  { label: 'Testimonios', href: '#testimonios' },
+]
 
 function onScroll() {
   navScrolled.value = window.scrollY > 50
@@ -83,19 +95,9 @@ watch(
             <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
           </RouterLink>
 
-          <!-- Nav links (after logo) -->
+          <!-- Gooey Nav -->
           <div class="abt-nav-left">
-            <ul class="abt-nav-links">
-              <li><RouterLink class="abt-nav-link" :to="{ name: 'home' }">Inicio</RouterLink></li>
-              <li><RouterLink class="abt-nav-link" :to="{ name: 'events' }">Eventos</RouterLink></li>
-              <li><RouterLink class="abt-nav-link" :to="{ name: 'catalog' }">Catálogo</RouterLink></li>
-              <li><a class="abt-nav-link" href="#nosotros">Nosotros</a></li>
-              <li>
-                <RouterLink class="abt-btn-neon btn-sm d-inline-block ms-1" :to="{ name: 'quote-builder' }">
-                  Cotizar
-                </RouterLink>
-              </li>
-            </ul>
+            <GooeyNav :items="navItems" />
           </div>
 
           <!-- Social icons (pushed to far right) -->
