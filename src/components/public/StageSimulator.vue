@@ -1,7 +1,10 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { useSiteStore } from '../../stores/site'
 
-const packages = [
+const siteStore = useSiteStore()
+
+const defaultPackages = [
   {
     id: 'basico',
     name: 'Social Básico',
@@ -101,10 +104,23 @@ const packages = [
   },
 ]
 
+const packages = computed(() => {
+  const list = siteStore.simulatorPackages && siteStore.simulatorPackages.length > 0
+    ? siteStore.simulatorPackages
+    : defaultPackages
+
+  return list.map(p => ({
+    ...p,
+    features: Array.isArray(p.features)
+      ? p.features
+      : (p.featuresText ? p.featuresText.split('\n').map(f => f.trim()).filter(Boolean) : (p.features || []))
+  }))
+})
+
 const activePackageId = ref('silver')
 
 const activePackage = computed(() => {
-  return packages.find((p) => p.id === activePackageId.value) || packages[1]
+  return packages.value.find((p) => p.id === activePackageId.value) || packages.value[0] || defaultPackages[1]
 })
 
 // Subwoofers and Line Array splitting (distributed left and right)

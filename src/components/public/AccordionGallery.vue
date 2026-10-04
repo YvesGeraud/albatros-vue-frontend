@@ -1,9 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useSiteStore } from '../../stores/site'
 
+const siteStore = useSiteStore()
 const activeDecade = ref('current')
 
-const decades = [
+const defaultDecades = [
   {
     id: '70s',
     period: "70's",
@@ -60,6 +62,19 @@ const decades = [
     color: '#00f0ff', // Electric Cyan
   },
 ]
+
+const decades = computed(() => {
+  const list = siteStore.trayectoriaEras && siteStore.trayectoriaEras.length > 0
+    ? siteStore.trayectoriaEras
+    : defaultDecades
+
+  return list.map(d => ({
+    ...d,
+    setup: Array.isArray(d.setup)
+      ? d.setup
+      : (d.setup ? String(d.setup).split(',').map(s => s.trim()).filter(Boolean) : [])
+  }))
+})
 </script>
 
 <template>

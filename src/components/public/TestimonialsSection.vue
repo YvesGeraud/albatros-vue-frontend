@@ -1,6 +1,9 @@
 <script setup>
 import { onMounted, ref, computed, onUnmounted } from 'vue'
 import { fetchTestimonials } from '../../api/testimonials'
+import { useSiteStore } from '../../stores/site'
+
+const siteStore = useSiteStore()
 
 const defaultTestimonials = [
   {
@@ -83,6 +86,15 @@ function stopAutoplay() {
 onMounted(async () => {
   updateVisibleCount()
   window.addEventListener('resize', updateVisibleCount)
+
+  if (siteStore.testimonialsList && siteStore.testimonialsList.length > 0) {
+    testimonials.value = siteStore.testimonialsList
+    if (testimonials.value.length > visibleCount.value) {
+      startAutoplay()
+    }
+    return
+  }
+
   try {
     const data = await fetchTestimonials()
     if (data && data.length > 0) {

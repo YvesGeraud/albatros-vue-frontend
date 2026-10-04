@@ -1,8 +1,10 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useEventsStore } from '../../stores/events'
+import { useSiteStore } from '../../stores/site'
 
 const eventsStore = useEventsStore()
+const siteStore = useSiteStore()
 const activeFilter = ref('all')
 const lightboxIndex = ref(null)
 
@@ -114,8 +116,12 @@ const basePhotos = [
   },
 ]
 
-// Merge photos from events in store if present
+// Merge photos from events in store if present, prioritized with CMS custom photos
 const allPhotos = computed(() => {
+  const customPhotos = siteStore.curatedPhotos && siteStore.curatedPhotos.length > 0
+    ? siteStore.curatedPhotos
+    : basePhotos
+
   const storePhotos = (eventsStore.events || [])
     .filter((e) => e.cover_image || e.image_url)
     .map((e, idx) => ({
@@ -126,7 +132,7 @@ const allPhotos = computed(() => {
       image: e.cover_image || e.image_url,
       description: e.description || 'Montaje profesional Albatros Sonido e Iluminación.',
     }))
-  return [...storePhotos, ...basePhotos]
+  return [...customPhotos, ...storePhotos]
 })
 
 const filteredPhotos = computed(() => {

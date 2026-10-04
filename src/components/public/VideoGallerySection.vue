@@ -1,9 +1,11 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useEventsStore } from '../../stores/events'
+import { useSiteStore } from '../../stores/site'
 import YouTubeEmbed from './YouTubeEmbed.vue'
 
 const eventsStore = useEventsStore()
+const siteStore = useSiteStore()
 
 const curatedVideos = [
   {
@@ -54,6 +56,14 @@ const curatedVideos = [
 
 // Add store videos if present
 const allVideos = computed(() => {
+  const customVideos = siteStore.curatedVideos && siteStore.curatedVideos.length > 0
+    ? siteStore.curatedVideos.map((v, i) => ({
+        ...v,
+        id: v.id || `cms-vid-${i}`,
+        thumbnail: v.thumbnail || `https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg`,
+      }))
+    : curatedVideos
+
   const storeVideos = (eventsStore.events || [])
     .filter((e) => e.media?.some((m) => m.type === 'youtube_video' || m.type === 'youtube_live'))
     .map((e, idx) => {
@@ -71,13 +81,16 @@ const allVideos = computed(() => {
       }
     })
 
-  return [...storeVideos, ...curatedVideos]
+  return [...customVideos, ...storeVideos]
 })
 
-const activeVideo = ref(curatedVideos[0])
+const selectedVideo = ref(null)
+const activeVideo = computed(() => {
+  return selectedVideo.value || allVideos.value[0] || curatedVideos[0]
+})
 
 function selectVideo(video) {
-  activeVideo.value = video
+  selectedVideo.value = video
 }
 </script>
 

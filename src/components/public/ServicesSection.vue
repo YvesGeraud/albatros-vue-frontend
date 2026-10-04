@@ -1,10 +1,12 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { animate, stagger } from 'animejs'
+import { useSiteStore } from '../../stores/site'
 
+const siteStore = useSiteStore()
 const cardsRef = ref(null)
 
-const services = [
+const defaultServices = [
   {
     icon: 'bi-speaker-fill',
     title: 'Sonido Profesional',
@@ -26,6 +28,12 @@ const services = [
     description: 'Animadores profesionales para hacer de tu evento una experiencia única.',
   },
 ]
+
+const services = computed(() => {
+  return siteStore.servicesList && siteStore.servicesList.length > 0
+    ? siteStore.servicesList
+    : defaultServices
+})
 
 onMounted(() => {
   if (cardsRef.value) {

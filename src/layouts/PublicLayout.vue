@@ -1,19 +1,18 @@
 <script setup>
-import { RouterLink, RouterView, useRouter } from 'vue-router'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useEventsStore } from '../stores/events'
 import { useSiteStore } from '../stores/site'
-import Swal from 'sweetalert2'
 import GooeyNav from '../components/public/GooeyNav.vue'
+import LiveToastNotification from '../components/public/LiveToastNotification.vue'
 
 const eventsStore = useEventsStore()
 const siteStore = useSiteStore()
-const router = useRouter()
 const navScrolled = ref(false)
 
 const navItems = [
   { label: 'Inicio', href: '#inicio' },
-  { label: 'Albatros', href: '#albatros' },
+  { label: 'Conócenos', href: '#conocenos' },
   { label: 'Trayectoria', href: '#trayectoria' },
   { label: 'Fotos', href: '#fotos' },
   { label: 'Videos', href: '#videos' },
@@ -36,49 +35,6 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
 })
-
-/* SweetAlert2 for live events — once per session */
-watch(
-  () => eventsStore.liveEvent,
-  (liveEvent) => {
-    if (!liveEvent) return
-    const key = `abt_live_shown_${liveEvent.id}`
-    if (sessionStorage.getItem(key)) return
-    sessionStorage.setItem(key, '1')
-
-    Swal.fire({
-      html: `
-        <div style="text-align:center;">
-          <div style="display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;">
-            <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ff6b35;animation:pulse 1.2s infinite;"></span>
-            <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:0.8rem;letter-spacing:0.1em;color:#ff6b35;">EN VIVO AHORA</span>
-          </div>
-          <h2 style="font-family:'Fraunces',serif;color:#f2effa;font-size:1.5rem;margin:0.5rem 0;">${liveEvent.title}</h2>
-          <p style="color:#9d97b3;font-size:0.9rem;margin:0;">¡No te lo pierdas! Haz clic para ver la transmisión.</p>
-        </div>
-      `,
-      background: 'rgba(22, 19, 31, 0.95)',
-      backdrop: 'rgba(10, 9, 18, 0.7)',
-      showConfirmButton: true,
-      confirmButtonText: '<i class="bi bi-play-circle me-2"></i> Ver transmisión',
-      showCancelButton: true,
-      cancelButtonText: 'Cerrar',
-      customClass: {
-        popup: 'abt-swal-popup',
-        confirmButton: 'abt-swal-confirm',
-        cancelButton: 'abt-swal-cancel',
-      },
-      buttonsStyling: false,
-      timer: 12000,
-      timerProgressBar: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.push({ name: 'event-detail', params: { slug: liveEvent.slug } })
-      }
-    })
-  },
-  { immediate: true },
-)
 </script>
 
 <template>
@@ -197,6 +153,9 @@ watch(
         </div>
       </div>
     </footer>
+
+    <!-- Live Event Non-Intrusive Floating Toast -->
+    <LiveToastNotification />
 
     <!-- WhatsApp Floating Button -->
     <a

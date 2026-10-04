@@ -49,7 +49,6 @@ const router = useRouter()
 const containerRef = ref(null)
 const navRef = ref(null)
 const filterRef = ref(null)
-const textRef = ref(null)
 const activeIndex = ref(props.initialActiveIndex)
 
 const noise = (n = 1) => n / 2 - Math.random() * n
@@ -117,7 +116,7 @@ const makeParticles = (element) => {
 }
 
 const updateEffectPosition = (element) => {
-  if (!containerRef.value || !filterRef.value || !textRef.value || !element) return
+  if (!containerRef.value || !filterRef.value || !element) return
   const containerRect = containerRef.value.getBoundingClientRect()
   const pos = element.getBoundingClientRect()
 
@@ -129,8 +128,6 @@ const updateEffectPosition = (element) => {
   }
 
   Object.assign(filterRef.value.style, styles)
-  Object.assign(textRef.value.style, styles)
-  textRef.value.innerText = element.innerText.trim()
 }
 
 const handleItemClick = (e, index, item) => {
@@ -170,12 +167,6 @@ const handleItemClick = (e, index, item) => {
         filterRef.value.removeChild(p)
       }
     })
-  }
-
-  if (textRef.value) {
-    textRef.value.classList.remove('active')
-    void textRef.value.offsetWidth
-    textRef.value.classList.add('active')
   }
 
   if (filterRef.value) {
@@ -256,7 +247,7 @@ onMounted(() => {
     const activeLi = navRef.value?.querySelectorAll('li')[activeIndex.value]
     if (activeLi) {
       updateEffectPosition(activeLi)
-      textRef.value?.classList.add('active')
+      filterRef.value?.classList.add('active')
     }
 
     if (containerRef.value) {
@@ -302,7 +293,10 @@ onUnmounted(() => {
       </defs>
     </svg>
 
-    <nav class="gooey-nav" style="transform: translate3d(0, 0, 0.01px);">
+    <!-- Animated Gooey White Pill (Behind links) -->
+    <span ref="filterRef" class="gooey-effect gooey-filter" />
+
+    <nav class="gooey-nav">
       <ul ref="navRef" class="gooey-nav-list">
         <li
           v-for="(item, index) in items"
@@ -320,8 +314,6 @@ onUnmounted(() => {
         </li>
       </ul>
     </nav>
-    <span ref="filterRef" class="gooey-effect gooey-filter" />
-    <span ref="textRef" class="gooey-effect gooey-text" />
   </div>
 </template>
 
@@ -340,6 +332,7 @@ onUnmounted(() => {
 .gooey-nav {
   display: flex;
   position: relative;
+  z-index: 10;
 }
 
 .gooey-nav-list {
@@ -350,15 +343,16 @@ onUnmounted(() => {
   padding: 0;
   margin: 0;
   position: relative;
-  z-index: 3;
+  z-index: 10;
 }
 
 .gooey-nav-item {
   position: relative;
   border-radius: 9999px;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  transition: color 0.3s ease;
   user-select: none;
+  z-index: 10;
 }
 
 .gooey-nav-link {
@@ -371,6 +365,8 @@ onUnmounted(() => {
   text-decoration: none;
   white-space: nowrap;
   transition: color 0.25s ease;
+  position: relative;
+  z-index: 12;
 }
 
 .gooey-nav-item:hover .gooey-nav-link {
@@ -378,25 +374,8 @@ onUnmounted(() => {
 }
 
 .gooey-nav-item.active .gooey-nav-link {
-  color: #0a0912;
-  font-weight: 600;
-}
-
-.gooey-nav-item::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background: white;
-  opacity: 0;
-  transform: scale(0);
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-
-.gooey-nav-item.active::after {
-  opacity: 1;
-  transform: scale(1);
+  color: #0a0912 !important;
+  font-weight: 700;
 }
 
 /* Gooey Effects */
@@ -404,25 +383,11 @@ onUnmounted(() => {
   position: absolute;
   opacity: 1;
   pointer-events: none;
-  display: grid;
-  place-items: center;
   z-index: 1;
   transition: left 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
               top 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
               width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
               height 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.gooey-effect.gooey-text {
-  color: #ffffff;
-  transition: color 0.3s ease;
-  font-weight: 600;
-  font-size: 0.95rem;
-  z-index: 4;
-}
-
-.gooey-effect.gooey-text.active {
-  color: #0a0912;
 }
 
 .gooey-svg-filter {
@@ -443,15 +408,8 @@ onUnmounted(() => {
   position: absolute;
   inset: 0;
   background: #ffffff;
-  transform: scale(0);
-  opacity: 0;
-  z-index: -1;
   border-radius: 9999px;
   box-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
-}
-
-.gooey-effect.active::after {
-  animation: gooey-pill 0.3s ease both;
 }
 
 @keyframes gooey-pill {

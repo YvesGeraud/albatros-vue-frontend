@@ -16,13 +16,27 @@ export const useSiteStore = defineStore('site', {
     heroPhrases: ['¡Haz tu Fiesta Única!', 'Sonido · Iluminación · Pista de Baile', 'Albatros Tlaxcala'],
     aboutTitle: 'Sobre Grupo Albatros',
     aboutDescription: '',
-    aboutBullets: [],
-    aboutImageUrl: null,
+    brandNarrative: '',
+    brandBullets: [],
+    brandStats: null,
+    trayectoriaEras: null,
+    curatedPhotos: null,
+    curatedVideos: null,
+    servicesList: null,
+    simulatorPackages: null,
+    testimonialsList: null,
+    liveStreamActive: false,
+    liveStreamTitle: '',
+    liveStreamYoutubeId: '',
+    liveStreamVenue: '',
+    liveStreamAddress: '',
+    liveStreamLat: 19.3182,
+    liveStreamLng: -98.2375,
     loaded: false,
   }),
   actions: {
-    async load() {
-      if (this.loaded) return
+    async load(force = false) {
+      if (this.loaded && !force) return
       try {
         const data = await fetchSiteSettings()
         this.siteName = data.site_name || this.siteName
@@ -63,6 +77,26 @@ export const useSiteStore = defineStore('site', {
           }
           this.aboutImageUrl = url
         }
+
+        // CMS Section datasets
+        this.brandNarrative = data.brand_narrative || ''
+        this.brandBullets = data.brand_bullets_data || this.aboutBullets || []
+        this.brandStats = data.brand_stats_data || null
+        this.trayectoriaEras = data.trayectoria_eras_data || null
+        this.curatedPhotos = data.curated_photos_data || null
+        this.curatedVideos = data.curated_videos_data || null
+        this.servicesList = data.services_list_data || null
+        this.simulatorPackages = data.simulator_packages_data || null
+        this.testimonialsList = data.testimonials_list_data || null
+
+        // Live stream
+        this.liveStreamActive = Boolean(data.live_stream_active)
+        this.liveStreamTitle = data.live_stream_title || ''
+        this.liveStreamYoutubeId = data.live_stream_youtube_id || ''
+        this.liveStreamVenue = data.live_stream_venue || ''
+        this.liveStreamAddress = data.live_stream_address || ''
+        this.liveStreamLat = Number(data.live_stream_lat) || 19.3182
+        this.liveStreamLng = Number(data.live_stream_lng) || -98.2375
 
         this.loaded = true
       } catch {
