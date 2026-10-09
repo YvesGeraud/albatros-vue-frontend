@@ -48,7 +48,7 @@ onUnmounted(() => {
         <div class="abt-navbar-wrapper">
           <!-- Logo (left) -->
           <RouterLink class="abt-brand text-decoration-none" :to="{ name: 'home' }">
-            <img src="/logo-albatros.png" alt="Albatros" class="abt-brand-logo" />
+            <img src="/logo-albatros.jpeg" alt="Albatros" class="abt-brand-logo" />
           </RouterLink>
 
           <!-- Gooey Nav -->

@@ -107,7 +107,7 @@ onMounted(() => {
       <!-- Centered Logo -->
       <div class="abt-brand-banner-logo-wrapper mb-4">
         <img
-          src="/logo-albatros.png"
+          src="/logo-albatros.jpeg"
           alt="Albatros Tlaxcala Logo"
           class="abt-brand-banner-logo img-fluid"
         />

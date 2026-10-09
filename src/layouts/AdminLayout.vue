@@ -16,7 +16,7 @@ async function handleLogout() {
     <aside class="d-flex flex-column p-3 abt-admin-sidebar" style="width: 260px; background: #0e0c18; border-right: 1px solid rgba(176,107,255,0.18);">
       <div class="d-flex align-items-center justify-content-between mb-4">
         <RouterLink :to="{ name: 'admin-dashboard' }" class="abt-display fw-bold text-decoration-none fs-5 d-flex align-items-center gap-2" style="color: var(--abt-text);">
-          <img src="/logo-albatros.png" alt="Logo" style="height: 28px; width: auto;" />
+          <img src="/logo-albatros.jpeg" alt="Logo" style="height: 28px; width: auto;" />
           <span>Albatros <span class="abt-text-purple">Admin</span></span>
         </RouterLink>
       </div>
