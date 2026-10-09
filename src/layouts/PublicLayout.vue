@@ -85,7 +85,7 @@ onUnmounted(() => {
           <!-- Brand & description -->
           <div class="col-lg-4">
             <div class="mb-3">
-              <img src="/logo-albatros.png" alt="Albatros" style="height: 40px; width: auto;" />
+              <img src="/logo-albatros.jpg" alt="Albatros" style="height: 40px; width: auto;" />
             </div>
             <p class="abt-text-muted small mb-3">
               {{ siteStore.siteTagline }}
