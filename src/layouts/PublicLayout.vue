@@ -47,8 +47,8 @@ const navItems = [
   { label: 'Trayectoria', href: '#trayectoria' },
   { label: 'Fotos', href: '#fotos' },
   { label: 'Videos', href: '#videos' },
-  { label: 'Servicios', href: '#servicios' },
-  { label: 'Paquetes', href: '#paquetes' },
+  { label: 'Servicios Producción Audiovisual', href: '#servicios' },
+  { label: 'Paquetes para Eventos', href: '#paquetes' },
   { label: 'Testimonios', href: '#testimonios' },
 ]
 
