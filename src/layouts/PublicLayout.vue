@@ -1,6 +1,6 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { RouterLink, RouterView, useRoute, useRouter } from 'vue-router'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useEventsStore } from '../stores/events'
 import { useSiteStore } from '../stores/site'
 import GooeyNav from '../components/public/GooeyNav.vue'
@@ -9,6 +9,37 @@ import LiveToastNotification from '../components/public/LiveToastNotification.vu
 const eventsStore = useEventsStore()
 const siteStore = useSiteStore()
 const navScrolled = ref(false)
+const mobileOpen = ref(false)
+const route = useRoute()
+const router = useRouter()
+
+function toggleMobile() {
+  mobileOpen.value = !mobileOpen.value
+}
+
+function onMobileLinkClick(e, item) {
+  e.preventDefault()
+  mobileOpen.value = false
+  if (route.name !== 'home') {
+    router.push({ name: 'home', hash: item.href })
+    return
+  }
+  const target = document.querySelector(item.href)
+  if (target) {
+    const top = target.getBoundingClientRect().top + window.scrollY - 70
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+  }
+}
+
+function onKeydown(e) {
+  if (e.key === 'Escape') mobileOpen.value = false
+}
+
+function onResize() {
+  if (window.innerWidth >= 992) mobileOpen.value = false
+}
+
+watch(() => route.fullPath, () => { mobileOpen.value = false })
 
 const navItems = [
   { label: 'Inicio', href: '#inicio' },
@@ -29,11 +60,15 @@ onMounted(async () => {
   siteStore.load()
   eventsStore.loadLiveNow()
   window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('keydown', onKeydown)
+  window.addEventListener('resize', onResize, { passive: true })
   onScroll()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('keydown', onKeydown)
+  window.removeEventListener('resize', onResize)
 })
 </script>
 
@@ -42,7 +77,7 @@ onUnmounted(() => {
     <!-- Glassmorphism Navbar -->
     <nav
       class="abt-navbar"
-      :class="{ 'abt-navbar--scrolled': navScrolled }"
+      :class="{ 'abt-navbar--scrolled': navScrolled || mobileOpen, 'abt-navbar--open': mobileOpen }"
     >
       <div class="container">
         <div class="abt-navbar-wrapper">
@@ -51,13 +86,27 @@ onUnmounted(() => {
             <img src="/logo-albatros.jpeg" alt="Albatros" class="abt-brand-logo" />
           </RouterLink>
 
-          <!-- Gooey Nav -->
-          <div class="abt-nav-left">
+          <!-- Gooey Nav (centered, desktop only) -->
+          <div class="abt-nav-center">
             <GooeyNav :items="navItems" />
           </div>
 
-          <!-- Social icons (pushed to far right) -->
-          <div v-if="siteStore.socialLinks.length" class="abt-social-icons ms-auto d-none d-lg-flex">
+          <!-- Hamburger (mobile only) -->
+          <button
+            id="abt-nav-toggle"
+            type="button"
+            class="abt-nav-toggle"
+            :class="{ 'is-open': mobileOpen }"
+            :aria-expanded="mobileOpen"
+            aria-controls="abt-mobile-menu"
+            aria-label="Abrir menú"
+            @click="toggleMobile"
+          >
+            <span></span><span></span><span></span>
+          </button>
+
+          <!-- Social icons (right, desktop only) -->
+          <div v-if="siteStore.socialLinks.length" class="abt-social-icons abt-nav-social">
             <a
               v-for="link in siteStore.socialLinks"
               :key="link.label"
@@ -70,8 +119,51 @@ onUnmounted(() => {
             </a>
           </div>
         </div>
+
+        <!-- Mobile collapsible menu -->
+        <div
+          id="abt-mobile-menu"
+          class="abt-mobile-menu"
+          :class="{ 'is-open': mobileOpen }"
+          :aria-hidden="!mobileOpen"
+        >
+          <div class="abt-mobile-menu-inner">
+            <ul class="abt-mobile-links">
+              <li
+                v-for="(item, i) in navItems"
+                :key="item.label"
+                :style="{ '--i': i }"
+              >
+                <a
+                  :href="item.href"
+                  :tabindex="mobileOpen ? 0 : -1"
+                  @click="onMobileLinkClick($event, item)"
+                >
+                  {{ item.label }}
+                  <i class="bi bi-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+            <div v-if="siteStore.socialLinks.length" class="abt-social-icons abt-mobile-social">
+              <a
+                v-for="link in siteStore.socialLinks"
+                :key="link.label"
+                :href="link.url"
+                target="_blank"
+                rel="noopener"
+                :aria-label="link.label"
+                :tabindex="mobileOpen ? 0 : -1"
+              >
+                <i class="bi" :class="link.icon"></i>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
+
+    <!-- Backdrop for mobile menu -->
+    <div class="abt-mobile-backdrop" :class="{ 'is-open': mobileOpen }" @click="mobileOpen = false"></div>
 
     <!-- Main content -->
     <main class="flex-grow-1">
