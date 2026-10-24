@@ -24,6 +24,7 @@ export const useSiteStore = defineStore('site', {
     curatedVideos: null,
     servicesList: null,
     simulatorPackages: null,
+    eventPackages: null,
     testimonialsList: null,
     liveStreamActive: false,
     liveStreamTitle: '',
@@ -87,6 +88,7 @@ export const useSiteStore = defineStore('site', {
         this.curatedVideos = data.curated_videos_data || null
         this.servicesList = data.services_list_data || null
         this.simulatorPackages = data.simulator_packages_data || null
+        this.eventPackages = data.event_packages_data || null
         this.testimonialsList = data.testimonials_list_data || null
 
         // Live stream

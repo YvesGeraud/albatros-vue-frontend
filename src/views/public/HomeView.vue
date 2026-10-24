@@ -6,8 +6,10 @@ import LiveEventSection from '../../components/public/LiveEventSection.vue'
 import AccordionGallery from '../../components/public/AccordionGallery.vue'
 import PhotoGallerySection from '../../components/public/PhotoGallerySection.vue'
 import VideoGallerySection from '../../components/public/VideoGallerySection.vue'
-import ServicesSection from '../../components/public/ServicesSection.vue'
-import StageSimulator from '../../components/public/StageSimulator.vue'
+//import ServicesSection from '../../components/public/ServicesSection.vue'
+// Simulador oculto temporalmente; reemplazado por PackagesSection.
+//import StageSimulator from '../../components/public/StageSimulator.vue'
+import PackagesSection from '../../components/public/PackagesSection.vue'
 import TestimonialsSection from '../../components/public/TestimonialsSection.vue'
 import ScrollReveal from '../../components/public/ScrollReveal.vue'
 import { useEventsStore } from '../../stores/events'
@@ -50,14 +52,19 @@ onMounted(() => {
       <VideoGallerySection />
     </ScrollReveal>
 
-    <!-- 6. Servicios de Producción -->
+    <!-- 6. Servicios de Producción 
     <ScrollReveal animation="fade-up">
       <ServicesSection />
-    </ScrollReveal>
+    </ScrollReveal>-->
 
-    <!-- 7. Simulador de Escenario & Paquetes -->
+    <!-- 7. Simulador de Escenario & Paquetes (oculto temporalmente)
     <ScrollReveal animation="fade-up">
       <StageSimulator />
+    </ScrollReveal>-->
+
+    <!-- 7. Paquetes para Eventos -->
+    <ScrollReveal animation="fade-up">
+      <PackagesSection />
     </ScrollReveal>
 
     <!-- 8. Testimonios & Reseñas -->

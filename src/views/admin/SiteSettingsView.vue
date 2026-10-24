@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { adminSettings } from '../../api/admin'
 import { adminUploads } from '../../api/uploads'
+import { mergeEventPackages } from '../../data/eventPackages'
 
 const activeTab = ref('live')
 
@@ -302,6 +303,8 @@ const settings = ref({
   services_list: JSON.parse(JSON.stringify(defaultServices)),
   // Simulator
   simulator_packages: JSON.parse(JSON.stringify(defaultPackages)),
+  // Paquetes para eventos
+  event_packages: mergeEventPackages(null),
   // Testimonials
   testimonials_list: JSON.parse(JSON.stringify(defaultTestimonials)),
 })
@@ -387,6 +390,8 @@ onMounted(async () => {
       settings.value.simulator_packages = data.simulator_packages_data
     }
 
+    settings.value.event_packages = mergeEventPackages(data.event_packages_data)
+
     if (data.testimonials_list_data && Array.isArray(data.testimonials_list_data) && data.testimonials_list_data.length > 0) {
       settings.value.testimonials_list = data.testimonials_list_data
     }
@@ -437,6 +442,7 @@ async function saveSection(sectionName) {
     curated_videos_data: settings.value.curated_videos,
     services_list_data: settings.value.services_list,
     simulator_packages_data: settings.value.simulator_packages,
+    event_packages_data: settings.value.event_packages,
     testimonials_list_data: settings.value.testimonials_list,
   }
 
@@ -547,6 +553,20 @@ function addTestimonial() {
 
 function removeTestimonial(idx) {
   settings.value.testimonials_list.splice(idx, 1)
+}
+
+// Event packages: one pending tag input per package id
+const newHighlight = ref({})
+
+function addHighlight(pkg) {
+  const tag = (newHighlight.value[pkg.id] || '').trim()
+  if (!tag) return
+  if (!pkg.highlights.includes(tag)) pkg.highlights.push(tag)
+  newHighlight.value[pkg.id] = ''
+}
+
+function removeHighlight(pkg, idx) {
+  pkg.highlights.splice(idx, 1)
 }
 </script>
 
@@ -665,13 +685,24 @@ function removeTestimonial(idx) {
           <li class="nav-item">
             <button
               class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
+              :class="{ active: activeTab === 'event_packages' }"
+              @click="activeTab = 'event_packages'"
+            >
+              <i class="bi bi-box-seam"></i>
+              <span>7. Paquetes</span>
+            </button>
+          </li>
+          <!-- Simulador oculto temporalmente (la sección pública también lo está)
+          <li class="nav-item">
+            <button
+              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
               :class="{ active: activeTab === 'packages' }"
               @click="activeTab = 'packages'"
             >
               <i class="bi bi-speaker"></i>
               <span>7. Paquetes / Simulador</span>
             </button>
-          </li>
+          </li>-->
           <li class="nav-item">
             <button
               class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
@@ -1313,7 +1344,152 @@ function removeTestimonial(idx) {
       </section>
 
       <!-- ======================================================== -->
-      <!-- TAB 7: PAQUETES & SIMULADOR (#paquetes)                 -->
+      <!-- TAB 7: PAQUETES PARA EVENTOS (#paquetes)                 -->
+      <!-- ======================================================== -->
+      <section v-show="activeTab === 'event_packages'" class="abt-cms-card p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary pb-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-box-seam fs-4 text-warning"></i>
+            <div>
+              <h2 class="h5 abt-display mb-0 text-white">Paquetes para Eventos</h2>
+              <div class="abt-text-muted small">Galería de acordeón con los 3 paquetes (Básico, Estándar y Golden) y su botón de cotización.</div>
+            </div>
+          </div>
+          <button class="btn abt-btn-neon btn-sm px-4" @click="saveSection('Paquetes')" :disabled="saving">
+            <i class="bi bi-check2 me-1"></i> {{ saving ? 'Guardando...' : 'Guardar Paquetes' }}
+          </button>
+        </div>
+
+        <div class="d-flex flex-column gap-4">
+          <div
+            v-for="pkg in settings.event_packages"
+            :key="pkg.id"
+            class="p-3 rounded border border-secondary"
+            style="background: rgba(22, 19, 31, 0.6);"
+          >
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <span class="badge px-3 py-1 rounded-pill flex-shrink-0" :style="{ background: pkg.color || '#b06bff', color: '#0a0912', fontWeight: '800' }">
+                {{ pkg.name }}
+              </span>
+              <input
+                v-model="pkg.title"
+                type="text"
+                class="form-control form-control-sm bg-dark text-light border-secondary fw-bold"
+                placeholder="Título del paquete"
+              />
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label small text-white-50">Nombre corto (panel cerrado):</label>
+                <input
+                  v-model="pkg.name"
+                  type="text"
+                  class="form-control form-control-sm bg-dark text-light border-secondary"
+                  placeholder="Golden"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-white-50">Etiqueta destacada:</label>
+                <input
+                  v-model="pkg.badge"
+                  type="text"
+                  class="form-control form-control-sm bg-dark text-light border-secondary"
+                  placeholder="Más Solicitado"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-white-50">Color representativo:</label>
+                <input
+                  v-model="pkg.color"
+                  type="color"
+                  class="form-control form-control-sm form-control-color bg-dark border-secondary w-100"
+                />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-white-50">Subtítulo / Ideal para:</label>
+                <input
+                  v-model="pkg.tagline"
+                  type="text"
+                  class="form-control form-control-sm bg-dark text-light border-secondary"
+                  placeholder="XV años, bodas y graduaciones"
+                />
+              </div>
+              <div class="col-md-8">
+                <label class="form-label small text-white-50">Foto de fondo (URL o Subir):</label>
+                <div class="d-flex align-items-center gap-2">
+                  <img
+                    v-if="pkg.image"
+                    :src="pkg.image"
+                    alt=""
+                    class="rounded flex-shrink-0"
+                    style="width: 48px; height: 32px; object-fit: cover;"
+                  />
+                  <input
+                    v-model="pkg.image"
+                    type="text"
+                    class="form-control form-control-sm bg-dark text-light border-secondary"
+                    placeholder="https://..."
+                  />
+                  <label class="btn btn-outline-info btn-sm mb-0 position-relative flex-shrink-0" :class="{ disabled: uploading }">
+                    <i class="bi bi-upload"></i>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      class="position-absolute top-0 start-0 opacity-0 w-100 h-100 cursor-pointer"
+                      @change="(e) => uploadImageToField(e.target.files[0], (url) => pkg.image = url, 'paquetes')"
+                      :disabled="uploading"
+                    />
+                  </label>
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label small text-white-50">Descripción:</label>
+                <textarea
+                  v-model="pkg.description"
+                  rows="2"
+                  class="form-control form-control-sm bg-dark text-light border-secondary"
+                ></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label small text-white-50">Tags "Incluye" (Enter para agregar):</label>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <span
+                    v-for="(tag, tIdx) in pkg.highlights"
+                    :key="tag"
+                    class="badge rounded-pill d-inline-flex align-items-center gap-1 px-3 py-2"
+                    style="background: rgba(176, 107, 255, 0.15); border: 1px solid rgba(176, 107, 255, 0.35); font-weight: 500;"
+                  >
+                    {{ tag }}
+                    <button
+                      type="button"
+                      class="btn-close btn-close-white ms-1"
+                      style="font-size: 0.5rem;"
+                      :aria-label="`Quitar ${tag}`"
+                      @click="removeHighlight(pkg, tIdx)"
+                    ></button>
+                  </span>
+                  <div class="input-group input-group-sm" style="max-width: 260px;">
+                    <input
+                      v-model="newHighlight[pkg.id]"
+                      type="text"
+                      class="form-control bg-dark text-light border-secondary"
+                      placeholder="Nuevo tag..."
+                      @keydown.enter.prevent="addHighlight(pkg)"
+                    />
+                    <button type="button" class="btn btn-outline-info" @click="addHighlight(pkg)">
+                      <i class="bi bi-plus-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- TAB 7 (oculto): PAQUETES & SIMULADOR                     -->
       <!-- ======================================================== -->
       <section v-show="activeTab === 'packages'" class="abt-cms-card p-4">
         <div class="d-flex align-items-center justify-content-between mb-3 border-bottom border-secondary pb-3">
