@@ -18,8 +18,10 @@ async function handleSubmit() {
   try {
     await auth.login({ email: email.value, password: password.value })
     router.push(route.query.redirect || { name: 'admin-dashboard' })
-  } catch {
-    error.value = 'Credenciales inválidas.'
+  } catch (err) {
+    error.value = err.response?.status === 429
+      ? 'Demasiados intentos. Espera un minuto e inténtalo de nuevo.'
+      : 'Credenciales inválidas.'
   } finally {
     loading.value = false
   }
@@ -42,6 +44,11 @@ async function handleSubmit() {
         <input v-model="password" type="password" class="form-control" required />
       </div>
 
+      <p v-if="route.query.expired && !error" class="text-warning small">
+        {{ route.query.expired === 'idle'
+          ? 'Tu sesión se cerró por inactividad. Vuelve a iniciar sesión.'
+          : 'Tu sesión expiró. Vuelve a iniciar sesión.' }}
+      </p>
       <p v-if="error" class="text-danger small">{{ error }}</p>
 
       <button type="submit" class="btn abt-btn-neon w-100" :disabled="loading">

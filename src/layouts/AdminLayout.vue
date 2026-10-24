@@ -1,9 +1,12 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import { useIdleLogout } from '../composables/useIdleLogout'
 
 const auth = useAuthStore()
 const router = useRouter()
+
+useIdleLogout()
 
 async function handleLogout() {
   await auth.logout()
