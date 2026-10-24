@@ -411,23 +411,8 @@ h1, h2, h3, h4, .abt-display {
   filter: drop-shadow(0 0 14px rgba(176, 107, 255, 0.5));
 }
 @media (min-width: 992px) {
-  /* La barra conserva su altura delgada; el logo (145px, igual que Conócenos)
-     se sobrepone y sobresale por debajo de ella. */
-  .abt-brand {
-    position: relative;
-    height: 75px;
-    width: 145px;
-    z-index: 2;
-  }
   .abt-brand-logo {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    height: 145px;
-    transform: translateY(-38%);
-  }
-  .abt-brand:hover .abt-brand-logo {
-    transform: translateY(-38%) scale(1.04);
+    height: 60px;
   }
 }
 
