@@ -224,8 +224,8 @@ h1, h2, h3, h4, .abt-display {
   left: 0;
   right: 0;
   z-index: 1030;
-  background: #000;
-  border-bottom: 1px solid var(--abt-glass-border);
+  background: transparent;
+  border-bottom: 1px solid transparent;
   transition: background var(--abt-transition-smooth),
               border-color var(--abt-transition-smooth),
               backdrop-filter var(--abt-transition-smooth);
@@ -233,9 +233,9 @@ h1, h2, h3, h4, .abt-display {
 }
 
 .abt-navbar.abt-navbar--scrolled {
-  background: #000;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: var(--abt-glass-bg);
+  backdrop-filter: blur(var(--abt-glass-blur));
+  -webkit-backdrop-filter: blur(var(--abt-glass-blur));
   border-bottom-color: var(--abt-glass-border);
   box-shadow: var(--abt-shadow-sm);
 }
@@ -411,9 +411,23 @@ h1, h2, h3, h4, .abt-display {
   filter: drop-shadow(0 0 14px rgba(176, 107, 255, 0.5));
 }
 @media (min-width: 992px) {
+  /* La barra conserva su altura delgada; el logo (145px, igual que Conócenos)
+     se sobrepone y sobresale por debajo de ella. */
+  .abt-brand {
+    position: relative;
+    height: 75px;
+    width: 145px;
+    z-index: 2;
+  }
   .abt-brand-logo {
-    height: auto;
-    max-height: 145px; /* mismo tamaño que el logo de Conócenos */
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 145px;
+    transform: translateY(-38%);
+  }
+  .abt-brand:hover .abt-brand-logo {
+    transform: translateY(-38%) scale(1.04);
   }
 }
 
