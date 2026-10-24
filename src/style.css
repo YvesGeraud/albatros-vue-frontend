@@ -224,8 +224,8 @@ h1, h2, h3, h4, .abt-display {
   left: 0;
   right: 0;
   z-index: 1030;
-  background: transparent;
-  border-bottom: 1px solid transparent;
+  background: #000;
+  border-bottom: 1px solid var(--abt-glass-border);
   transition: background var(--abt-transition-smooth),
               border-color var(--abt-transition-smooth),
               backdrop-filter var(--abt-transition-smooth);
@@ -233,9 +233,9 @@ h1, h2, h3, h4, .abt-display {
 }
 
 .abt-navbar.abt-navbar--scrolled {
-  background: var(--abt-glass-bg);
-  backdrop-filter: blur(var(--abt-glass-blur));
-  -webkit-backdrop-filter: blur(var(--abt-glass-blur));
+  background: #000;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border-bottom-color: var(--abt-glass-border);
   box-shadow: var(--abt-shadow-sm);
 }
@@ -409,6 +409,12 @@ h1, h2, h3, h4, .abt-display {
 .abt-brand:hover .abt-brand-logo {
   transform: scale(1.04);
   filter: drop-shadow(0 0 14px rgba(176, 107, 255, 0.5));
+}
+@media (min-width: 992px) {
+  .abt-brand-logo {
+    height: auto;
+    max-height: 145px; /* mismo tamaño que el logo de Conócenos */
+  }
 }
 
 .abt-nav-links {
