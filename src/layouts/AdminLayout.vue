@@ -67,7 +67,7 @@ async function handleLogout() {
         </div>
         <button class="btn btn-outline-danger btn-sm w-100 rounded-pill d-flex align-items-center justify-content-center gap-2" @click="handleLogout">
           <i class="bi bi-box-arrow-left"></i>
-          <span>Cerrar sesiÃ³n</span>
+          <span>Cerrar sesión</span>
         </button>
       </div>
     </aside>
