@@ -17,11 +17,11 @@ async function handleSubmit() {
   error.value = null
   try {
     await auth.login({ email: email.value, password: password.value })
-    router.push(route.query.redirect || { name: 'admin-dashboard' })
+    router.push(route.query.redirect || { name: 'admin-settings' })
   } catch (err) {
     error.value = err.response?.status === 429
-      ? 'Demasiados intentos. Espera un minuto e inténtalo de nuevo.'
-      : 'Credenciales inválidas.'
+      ? 'Demasiados intentos. Espera un minuto e intÃ©ntalo de nuevo.'
+      : 'Credenciales invÃ¡lidas.'
   } finally {
     loading.value = false
   }
@@ -40,14 +40,14 @@ async function handleSubmit() {
         <input v-model="email" type="email" class="form-control" required autofocus />
       </div>
       <div class="mb-3">
-        <label class="form-label small">Contraseña</label>
+        <label class="form-label small">ContraseÃ±a</label>
         <input v-model="password" type="password" class="form-control" required />
       </div>
 
       <p v-if="route.query.expired && !error" class="text-warning small">
         {{ route.query.expired === 'idle'
-          ? 'Tu sesión se cerró por inactividad. Vuelve a iniciar sesión.'
-          : 'Tu sesión expiró. Vuelve a iniciar sesión.' }}
+          ? 'Tu sesiÃ³n se cerrÃ³ por inactividad. Vuelve a iniciar sesiÃ³n.'
+          : 'Tu sesiÃ³n expirÃ³. Vuelve a iniciar sesiÃ³n.' }}
       </p>
       <p v-if="error" class="text-danger small">{{ error }}</p>
 

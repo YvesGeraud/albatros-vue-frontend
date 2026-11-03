@@ -1,10 +1,14 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { adminSettings } from '../../api/admin'
 import { adminUploads } from '../../api/uploads'
 import { mergeEventPackages } from '../../data/eventPackages'
 
-const activeTab = ref('live')
+const route = useRoute()
+const validTabs = ['live','hero','conocenos','trayectoria','photos','videos','services','event_packages','packages','testimonials','contact']
+const activeTab = ref(validTabs.includes(route.query.tab) ? route.query.tab : 'live')
+watch(() => route.query.tab, (t) => { if (validTabs.includes(t)) activeTab.value = t })
 
 // Default fallbacks for rich sections
 const defaultStats = [
@@ -609,123 +613,6 @@ function removeHighlight(pkg, idx) {
     </div>
 
     <div v-else>
-      <!-- Section Navigation Pills -->
-      <div class="abt-cms-nav-scroll mb-4">
-        <ul class="nav nav-pills flex-nowrap gap-2 p-1 rounded-pill" style="background: rgba(22, 19, 31, 0.7); border: 1px solid rgba(176,107,255,0.2);">
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'live' }"
-              @click="activeTab = 'live'"
-            >
-              <span class="abt-live-dot" :class="{ active: settings.live_stream_active }"></span>
-              <span>0. En Vivo</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'hero' }"
-              @click="activeTab = 'hero'"
-            >
-              <i class="bi bi-film"></i>
-              <span>1. Hero / Video</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'conocenos' }"
-              @click="activeTab = 'conocenos'"
-            >
-              <i class="bi bi-stars"></i>
-              <span>2. Conócenos</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'trayectoria' }"
-              @click="activeTab = 'trayectoria'"
-            >
-              <i class="bi bi-clock-history"></i>
-              <span>3. Trayectoria</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'photos' }"
-              @click="activeTab = 'photos'"
-            >
-              <i class="bi bi-images"></i>
-              <span>4. Galería Fotos</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'videos' }"
-              @click="activeTab = 'videos'"
-            >
-              <i class="bi bi-youtube"></i>
-              <span>5. Galería Videos</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'services' }"
-              @click="activeTab = 'services'"
-            >
-              <i class="bi bi-sliders"></i>
-              <span>6. Servicios</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'event_packages' }"
-              @click="activeTab = 'event_packages'"
-            >
-              <i class="bi bi-box-seam"></i>
-              <span>7. Paquetes</span>
-            </button>
-          </li>
-          <!-- Simulador oculto temporalmente (la sección pública también lo está)
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'packages' }"
-              @click="activeTab = 'packages'"
-            >
-              <i class="bi bi-speaker"></i>
-              <span>7. Paquetes / Simulador</span>
-            </button>
-          </li>-->
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'testimonials' }"
-              @click="activeTab = 'testimonials'"
-            >
-              <i class="bi bi-chat-heart"></i>
-              <span>8. Testimonios</span>
-            </button>
-          </li>
-          <li class="nav-item">
-            <button
-              class="nav-link rounded-pill text-nowrap d-flex align-items-center gap-2 py-2 px-3"
-              :class="{ active: activeTab === 'contact' }"
-              @click="activeTab = 'contact'"
-            >
-              <i class="bi bi-whatsapp"></i>
-              <span>9. Redes & WhatsApp</span>
-            </button>
-          </li>
-        </ul>
-      </div>
-
       <!-- ======================================================== -->
       <!-- TAB 0: EN VIVO (#en-vivo)                                -->
       <!-- ======================================================== -->

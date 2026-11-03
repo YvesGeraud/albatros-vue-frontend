@@ -108,14 +108,6 @@ onUnmounted(() => {
       <p class="lead mx-auto" style="max-width: 36rem;">
         {{ heroSubtitle }}
       </p>
-      <div class="d-flex justify-content-center gap-3 flex-wrap">
-        <a href="#cotizador" class="abt-btn-neon">
-          Arma tu cotización
-        </a>
-        <a href="#galeria" class="abt-btn-outline">
-          Ver galería
-        </a>
-      </div>
     </div>
 
     <!-- Scroll indicator -->
