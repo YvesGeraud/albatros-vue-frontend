@@ -10,10 +10,10 @@ const route = useRoute()
 const sections = [
   { tab: 'live', label: '0. En Vivo', icon: 'bi bi-broadcast' },
   { tab: 'hero', label: '1. Hero / Video', icon: 'bi bi-film' },
-  { tab: 'conocenos', label: '2. ConÃ³cenos', icon: 'bi bi-stars' },
+  { tab: 'conocenos', label: '2. Conócenos', icon: 'bi bi-stars' },
   { tab: 'trayectoria', label: '3. Trayectoria', icon: 'bi bi-clock-history' },
-  { tab: 'photos', label: '4. GalerÃ­a Fotos', icon: 'bi bi-images' },
-  { tab: 'videos', label: '5. GalerÃ­a Videos', icon: 'bi bi-youtube' },
+  { tab: 'photos', label: '4. Galerí­a Fotos', icon: 'bi bi-images' },
+  { tab: 'videos', label: '5. Galerí­a Videos', icon: 'bi bi-youtube' },
   { tab: 'services', label: '6. Servicios', icon: 'bi bi-sliders' },
   { tab: 'event_packages', label: '7. Paquetes', icon: 'bi bi-box-seam' },
   { tab: 'testimonials', label: '8. Testimonios', icon: 'bi bi-chat-heart' },
