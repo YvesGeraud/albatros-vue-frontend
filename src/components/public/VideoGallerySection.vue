@@ -164,6 +164,8 @@ function selectVideo(video) {
                   <img
                     :src="video.thumbnail"
                     :alt="video.title"
+                    loading="lazy"
+                    decoding="async"
                     class="abt-item-thumb"
                   />
                   <div class="abt-item-play-overlay">

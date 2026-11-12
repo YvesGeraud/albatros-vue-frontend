@@ -159,6 +159,8 @@ onUnmounted(() => {
               <img
                 v-if="testimonial.avatar_url"
                 :src="testimonial.avatar_url"
+                loading="lazy"
+                decoding="async"
                 class="rounded-circle"
                 style="width: 48px; height: 48px; object-fit: cover; border: 2px solid var(--abt-purple-dim);"
                 :alt="testimonial.customer_name"

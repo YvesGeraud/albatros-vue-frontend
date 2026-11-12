@@ -1015,7 +1015,7 @@ function removeHighlight(pkg, idx) {
             <div class="p-3 rounded border border-secondary bg-dark h-100 d-flex flex-column">
               <!-- Thumbnail -->
               <div class="ratio ratio-16x9 rounded overflow-hidden mb-2 border border-secondary">
-                <img :src="photo.image" :alt="photo.title" style="object-fit: cover;" />
+                <img :src="photo.image" :alt="photo.title" loading="lazy" decoding="async" style="object-fit: cover;" />
               </div>
 
               <!-- Upload direct image button -->
@@ -1309,6 +1309,8 @@ function removeHighlight(pkg, idx) {
                     v-if="pkg.image"
                     :src="pkg.image"
                     alt=""
+                    loading="lazy"
+                    decoding="async"
                     class="rounded flex-shrink-0"
                     style="width: 48px; height: 32px; object-fit: cover;"
                   />

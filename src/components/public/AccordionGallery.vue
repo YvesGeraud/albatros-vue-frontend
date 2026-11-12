@@ -104,10 +104,13 @@ const decades = computed(() => {
           @mouseenter="activeDecade = item.id"
         >
           <!-- Background Image with Overlay -->
-          <div
+          <img
+            :src="item.image"
+            :alt="item.title || item.period"
+            loading="lazy"
+            decoding="async"
             class="abt-accordion-bg"
-            :style="{ backgroundImage: `url(${item.image})` }"
-          ></div>
+          />
           <div class="abt-accordion-gradient"></div>
 
           <!-- Collapsed Label (Visible when panel is narrow) -->
@@ -218,8 +221,10 @@ const decades = computed(() => {
 .abt-accordion-bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   filter: saturate(0.9) brightness(0.65);
   transform: scale(1.05);
   transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.5s ease;

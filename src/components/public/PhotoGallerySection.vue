@@ -237,6 +237,7 @@ onUnmounted(() => {
                 :src="photo.image"
                 :alt="photo.title"
                 loading="lazy"
+                decoding="async"
                 class="abt-photo-thumb"
               />
               <div class="abt-photo-overlay">
