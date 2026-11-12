@@ -13,6 +13,7 @@ const router = createRouter({
         { path: 'eventos/:slug', name: 'event-detail', component: () => import('../views/public/EventDetailView.vue') },
         { path: 'catalogo', name: 'catalog', component: () => import('../views/public/CatalogView.vue') },
         { path: 'cotizador', name: 'quote-builder', component: () => import('../views/public/QuoteBuilderView.vue') },
+        { path: 'promocion', name: 'flyer', alias: ['flyer', 'redes'], component: () => import('../views/public/FlyerView.vue') },
       ],
     },
     {
